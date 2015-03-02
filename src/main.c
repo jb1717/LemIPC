@@ -1,11 +1,11 @@
 /*
 ** main.c for main in /home/tran_0/rendu/PSU_2014_lemipc
-** 
+**
 ** Made by David Tran
 ** Login   <tran_0@epitech.net>
-** 
+**
 ** Started on  Sun Mar  1 15:08:16 2015 David Tran
-** Last update Mon Mar  2 13:19:04 2015 David Tran
+** Last update Mon Mar  2 13:33:56 2015 Jean-Baptiste Grégoire
 */
 
 #include <unistd.h>
@@ -21,7 +21,7 @@ void		print_map(t_princ *lemip)
   while (i < MAP_LEN * MAP_LEN)
     {
       printf("%d", tmp[i]);
-      if (i % MAP_LEN == 0 && i != 0)
+      if ((i + 1) % MAP_LEN == 0)
 	printf("\n");
       i++;
     }
@@ -30,9 +30,9 @@ void		print_map(t_princ *lemip)
 int		main()
 {
   t_princ	lemip;
-  char		path[20];
+  char		path[256];
 
-  lemip.key = ftok(getcwd(path, 20), 0);
+  lemip.key = ftok(getcwd(path, 256), 0);
   if ((lemip.shm_id = shmget(lemip.key,
 			     MAP_LEN * MAP_LEN, SHM_R | SHM_W)) == -1)
     {
