@@ -5,14 +5,15 @@
 ## Login   <jibb@epitech.net>
 ## 
 ## Started on  Fri Feb 27 11:27:47 2015 Jean-Baptiste Grégoire
-## Last update Mon Mar  2 12:00:00 2015 David Tran
+## Last update Mon Mar  2 15:44:26 2015 David Tran
 ##
 
 DEBUG		= 	no
 
 NAME		=	lemipc
 
-SRC		=	src/main.c
+SRC		=	src/main.c		\
+			src/control_map.c	\
 
 OBJ		=	$(SRC:.c=.o)
 
@@ -33,7 +34,7 @@ else
 endif
 
 $(NAME):	$(OBJ)
-		$(CC) -o $(NAME) $(OBJ)
+		$(CC) -o $(NAME) $(OBJ) -pthread
 
 all:		$(NAME)
 

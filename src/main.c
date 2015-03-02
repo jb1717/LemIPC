@@ -5,10 +5,9 @@
 ** Login   <tran_0@epitech.net>
 ** 
 ** Started on  Sun Mar  1 15:08:16 2015 David Tran
-** Last update Mon Mar  2 13:19:04 2015 David Tran
+** Last update Mon Mar  2 15:35:23 2015 David Tran
 */
 
-#include <unistd.h>
 #include "lemipc.h"
 
 void		print_map(t_princ *lemip)
@@ -32,17 +31,21 @@ int		main()
   t_princ	lemip;
   char		path[20];
 
-  lemip.key = ftok(getcwd(path, 20), 0);
+  if ((lemip.key = ftok(getcwd(path, 20), 0)) == -1)
+    return (EXIT_FAILURE);
   if ((lemip.shm_id = shmget(lemip.key,
 			     MAP_LEN * MAP_LEN, SHM_R | SHM_W)) == -1)
     {
-      lemip.shm_id = shmget(lemip.key, MAP_LEN * MAP_LEN,
-			    IPC_CREAT | SHM_R | SHM_W);
-      lemip.addrmap = shmat(lemip.shm_id, NULL, SHM_R | SHM_W);
+      if ((lemip.shm_id = shmget(lemip.key, MAP_LEN * MAP_LEN,
+				 IPC_CREAT | SHM_R | SHM_W)) == -1)
+	return (EXIT_FAILURE);
+      if ((lemip.addrmap = shmat(lemip.shm_id, NULL, SHM_R | SHM_W)) == (void *)-1)
+	return (EXIT_FAILURE);
       bzero(lemip.addrmap, MAP_LEN * MAP_LEN);
+      launch_thread(&lemip);
+      shmctl(lemip.shm_id, IPC_RMID, NULL);
     }
   else
     lemip.addrmap = shmat(lemip.shm_id, NULL, SHM_R | SHM_W);
-  print_map(&lemip);
-return (EXIT_SUCCESS);
+  return (EXIT_SUCCESS);
 }
