@@ -5,14 +5,14 @@
 ## Login   <jibb@epitech.net>
 ## 
 ## Started on  Fri Feb 27 11:27:47 2015 Jean-Baptiste Grégoire
-## Last update Fri Feb 27 11:29:04 2015 Jean-Baptiste Grégoire
+## Last update Mon Mar  2 12:00:00 2015 David Tran
 ##
 
 DEBUG		= 	no
 
 NAME		=	lemipc
 
-SRC		=
+SRC		=	src/main.c
 
 OBJ		=	$(SRC:.c=.o)
 
@@ -21,6 +21,8 @@ RM		=	rm -f
 CC		=	gcc
 
 INCLUDES	=	includes/
+
+FOLDER_SRC	=	src/
 
 CFLAGS		=	-W -Wall -Wextra -I $(INCLUDES)
 
