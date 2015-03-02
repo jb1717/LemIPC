@@ -5,7 +5,7 @@
 ** Login   <tran_0@epitech.net>
 ** 
 ** Started on  Sun Mar  1 15:08:16 2015 David Tran
-** Last update Mon Mar  2 13:12:47 2015 David Tran
+** Last update Mon Mar  2 13:19:04 2015 David Tran
 */
 
 #include <unistd.h>
@@ -30,11 +30,9 @@ void		print_map(t_princ *lemip)
 int		main()
 {
   t_princ	lemip;
-  char		*path;
+  char		path[20];
 
-  if (!(path = get_current_dir_name()))
-    return (EXIT_FAILURE);
-  lemip.key = ftok(path, 0);
+  lemip.key = ftok(getcwd(path, 20), 0);
   if ((lemip.shm_id = shmget(lemip.key,
 			     MAP_LEN * MAP_LEN, SHM_R | SHM_W)) == -1)
     {
