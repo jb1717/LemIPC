@@ -1,18 +1,27 @@
 /*
 ** control_map.c for lemipc in /home/tran_0/rendu/PSU_2014_lemipc
-** 
+**
 ** Made by David Tran
 ** Login   <tran_0@epitech.net>
-** 
+**
 ** Started on  Mon Mar  2 14:24:02 2015 David Tran
-** Last update Mon Mar  2 15:32:59 2015 David Tran
+** Last update Mon Mar  2 16:50:00 2015 Jean-Baptiste Grégoire
 */
 
 #include "lemipc.h"
 
-void	*launch_map_IA(void *iathread)
+void		*launch_map_IA(void *iathread)
 {
-  return (0);
+  t_princ	*lemip;
+  t_msgbuf	msgbuf;
+
+  lemip = (t_princ *)(iathread);
+  if (msgrcv(lemip->msg_id, &msgbuf, sizeof(t_msgbuf), MSG_TYPE, 0) == -1)
+    {
+      perror("Can't receive message");
+      return ((void *)(EXIT_FAILURE));
+    }
+  return ((void *)(EXIT_SUCCESS));
 }
 
 void		launch_thread(t_princ *lemip)
