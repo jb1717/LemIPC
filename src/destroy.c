@@ -5,14 +5,14 @@
 ** Login   <jibb@epitech.net>
 **
 ** Started on  Tue Mar  3 11:33:29 2015 Jean-Baptiste Grégoire
-** Last update Tue Mar  3 12:59:55 2015 Jean-Baptiste Grégoire
+** Last update Tue Mar  3 15:09:31 2015 Jean-Baptiste Grégoire
 */
 
 #include "lemipc.h"
 
 int		destroy_resources(t_princ *lemip)
 {
-  if (shmdt(lemip->addrmap) == -1)
+  if (shmctl(lemip->shm_id, IPC_RMID, NULL) == -1)
     {
       perror("Destruction of shared memory error");
       return (EXIT_FAILURE);

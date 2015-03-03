@@ -5,7 +5,7 @@
 ** Login   <tran_0@epitech.net>
 **
 ** Started on  Sun Mar  1 14:50:31 2015 David Tran
-** Last update Tue Mar  3 12:57:45 2015 Jean-Baptiste Grégoire
+** Last update Tue Mar  3 16:01:52 2015 Jean-Baptiste Grégoire
 */
 
 #ifndef LEMIPC_H_
@@ -15,6 +15,7 @@
 # include <sys/ipc.h>
 # include <sys/shm.h>
 # include <sys/msg.h>
+# include <sys/sem.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <strings.h>
@@ -38,6 +39,7 @@ typedef struct		s_princ
   key_t			key;
   int			shm_id;
   int			msg_id;
+  int			sem_id;
   void			*addrmap;
   t_ia			player;
 }			t_princ;
@@ -50,5 +52,6 @@ typedef struct		s_msgbuf
 
 void			launch_thread(t_princ *);
 int			init_player(t_princ *, char *);
+int			destroy_resources(t_princ *);
 
 #endif /* !LEMIPC_H_ */
