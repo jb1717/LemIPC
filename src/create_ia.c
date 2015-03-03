@@ -5,28 +5,46 @@
 ** Login   <jibb@epitech.net>
 **
 ** Started on  Tue Mar  3 10:53:23 2015 Jean-Baptiste Grégoire
-** Last update Tue Mar  3 12:19:27 2015 Jean-Baptiste Grégoire
+** Last update Tue Mar  3 12:59:42 2015 Jean-Baptiste Grégoire
 */
 
 #include "lemipc.h"
 
-void		launch_player(t_princ *lemip)
+static int	get_team_number(char *team_number)
 {
-  int		x;
-  int		y;
+  int		tmp;
+
+  if ((tmp = atoi(team_number)) == 0)
+    {
+      printf("Invalid team number: must be different from zero\n");
+      return (EXIT_FAILURE);
+    }
+  if (tmp < 0)
+    {
+      printf("Invalid team number: must be different from zero\n");
+      return (EXIT_FAILURE);
+    }
+  return (tmp);
+}
+
+int		init_player(t_princ *lemip, char *team_number)
+{
   char		good;
   char		*tmp;
 
   good = 1;
+  if ((lemip->player.team = get_team_number(team_number)) == EXIT_FAILURE)
+    return (EXIT_FAILURE);
   tmp = (char *)(lemip->addrmap);
   while (good)
     {
-      x = rand() % MAP_LEN;
-      y = rand() % MAP_LEN;
-      if (tmp[y * MAP_LEN + x] == 0)
+      lemip->player.pos_x = rand() % MAP_LEN;
+      lemip->player.pos_y = rand() % MAP_LEN;
+      if (tmp[lemip->player.pos_y * MAP_LEN + lemip->player.pos_x] == 0)
 	{
-	  tmp[y * MAP_LEN + x] = 1;
+	  tmp[lemip->player.pos_y * MAP_LEN + lemip->player.pos_x] = lemip->player.team;
 	  good = 0;
 	}
     }
+  return (EXIT_SUCCESS);
 }

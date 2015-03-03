@@ -5,7 +5,7 @@
 ** Login   <tran_0@epitech.net>
 **
 ** Started on  Sun Mar  1 14:50:31 2015 David Tran
-** Last update Tue Mar  3 11:23:46 2015 Jean-Baptiste Grégoire
+** Last update Tue Mar  3 12:57:45 2015 Jean-Baptiste Grégoire
 */
 
 #ifndef LEMIPC_H_
@@ -26,12 +26,20 @@
 # define MSG_BUF_SIZE	256
 # define MSG_TYPE	1
 
+typedef struct		s_ia
+{
+  int			pos_x;
+  int			pos_y;
+  char			team;
+}			t_ia;
+
 typedef struct		s_princ
 {
   key_t			key;
   int			shm_id;
   int			msg_id;
   void			*addrmap;
+  t_ia			player;
 }			t_princ;
 
 typedef struct		s_msgbuf
@@ -40,14 +48,7 @@ typedef struct		s_msgbuf
   char			mdata[MSG_BUF_SIZE];
 }			t_msgbuf;
 
-typedef struct		s_ia
-{
-  int			pos_x;
-  int			pos_y;
-  char			team;
-}			t_ia;
-
 void			launch_thread(t_princ *);
-void			launch_player(t_princ *);
+int			init_player(t_princ *, char *);
 
 #endif /* !LEMIPC_H_ */

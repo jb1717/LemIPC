@@ -5,7 +5,7 @@
 ** Login   <tran_0@epitech.net>
 **
 ** Started on  Mon Mar  2 14:24:02 2015 David Tran
-** Last update Tue Mar  3 11:27:57 2015 Jean-Baptiste Grégoire
+** Last update Tue Mar  3 12:58:14 2015 Jean-Baptiste Grégoire
 */
 
 #include "lemipc.h"
@@ -33,7 +33,6 @@ void		launch_thread(t_princ *lemip)
     pthread_join(take_map, NULL);
   else if (back == -1)
     return ;
-  else
-     launch_player(lemip);
-  sleep(10);
+  /* else */
+  /*    launch_player(lemip); */
 }

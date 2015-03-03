@@ -5,7 +5,7 @@
 ** Login   <tran_0@epitech.net>
 **
 ** Started on  Sun Mar  1 15:08:16 2015 David Tran
-** Last update Tue Mar  3 11:27:24 2015 Jean-Baptiste Grégoire
+** Last update Tue Mar  3 12:57:58 2015 Jean-Baptiste Grégoire
 */
 
 #include "lemipc.h"
@@ -30,6 +30,7 @@ int		init_resources(t_princ *lemip)
 {
   char		path[256];
 
+  srand(time(NULL));
   if ((lemip->key = ftok(getcwd(path, 256), 0)) == -1)
     return (EXIT_FAILURE);
   if ((lemip->shm_id = shmget(lemip->key,
@@ -45,7 +46,6 @@ int		init_resources(t_princ *lemip)
 				 IPC_CREAT | SHM_R | SHM_W)) == -1)
 	return (EXIT_FAILURE);
       bzero(lemip->addrmap, MAP_LEN * MAP_LEN);
-      launch_thread(lemip);
       shmctl(lemip->shm_id, IPC_RMID, NULL);
     }
   else
@@ -53,17 +53,20 @@ int		init_resources(t_princ *lemip)
   return (EXIT_SUCCESS);
 }
 
-int		main()
+int		main(int argc, char **argv)
 {
   t_princ	lemip;
 
-  srand(time(NULL));
+  if (argc != 2)
+    {
+      printf("Usage: %s [number team]\n", argv[0]);
+      return (EXIT_SUCCESS);
+    }
   if (init_resources(&lemip) == -1)
     {
       fprintf(stderr, "Can't create resources requiered for the battle !\n");
       return (EXIT_FAILURE);
     }
-  launch_thread(&lemip);
-  print_map(&lemip);
+  init_player(&lemip, argv[2]);
   return (EXIT_SUCCESS);
 }
