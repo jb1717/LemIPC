@@ -5,7 +5,7 @@
 ** Login   <tran_0@epitech.net>
 **
 ** Started on  Sun Mar  1 15:08:16 2015 David Tran
-** Last update Mon Mar  2 16:49:27 2015 Jean-Baptiste Grégoire
+** Last update Tue Mar  3 11:27:24 2015 Jean-Baptiste Grégoire
 */
 
 #include "lemipc.h"
@@ -57,10 +57,13 @@ int		main()
 {
   t_princ	lemip;
 
+  srand(time(NULL));
   if (init_resources(&lemip) == -1)
     {
       fprintf(stderr, "Can't create resources requiered for the battle !\n");
       return (EXIT_FAILURE);
     }
+  launch_thread(&lemip);
+  print_map(&lemip);
   return (EXIT_SUCCESS);
 }

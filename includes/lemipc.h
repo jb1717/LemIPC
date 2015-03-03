@@ -5,7 +5,7 @@
 ** Login   <tran_0@epitech.net>
 **
 ** Started on  Sun Mar  1 14:50:31 2015 David Tran
-** Last update Mon Mar  2 16:35:51 2015 Jean-Baptiste Grégoire
+** Last update Tue Mar  3 11:23:46 2015 Jean-Baptiste Grégoire
 */
 
 #ifndef LEMIPC_H_
@@ -40,6 +40,14 @@ typedef struct		s_msgbuf
   char			mdata[MSG_BUF_SIZE];
 }			t_msgbuf;
 
+typedef struct		s_ia
+{
+  int			pos_x;
+  int			pos_y;
+  char			team;
+}			t_ia;
+
 void			launch_thread(t_princ *);
+void			launch_player(t_princ *);
 
 #endif /* !LEMIPC_H_ */
