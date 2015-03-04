@@ -5,7 +5,7 @@
 ## Login   <jibb@epitech.net>
 ##
 ## Started on  Fri Feb 27 11:27:47 2015 Jean-Baptiste Grégoire
-## Last update Wed Mar  4 01:01:46 2015 David Tran
+## Last update Wed Mar  4 22:15:27 2015 David Tran
 ##
 
 DEBUG		= 	yes
@@ -45,7 +45,7 @@ $(NAME):	$(OBJ)
 		$(CC) -o $(NAME) $(OBJ) -pthread
 
 $(GRAPHIC):	$(OBJ_GRAPH)
-		$(CC) $(CFLAGS) -o $(GRAPHIC) $(OBJ_GRAPH) -lSDL -lSDLmain -lSDL_gfx -lSDL_image
+		$(CC) $(CFLAGS) -o $(GRAPHIC) $(OBJ_GRAPH) -lSDL -lSDLmain -lSDL_gfx -lSDL_image -pthread
 
 graphic:	$(GRAPHIC)
 

@@ -5,7 +5,7 @@
 ** Login   <jibb@epitech.net>
 **
 ** Started on  Tue Mar  3 10:53:23 2015 Jean-Baptiste Grégoire
-** Last update Tue Mar  3 15:13:23 2015 Jean-Baptiste Grégoire
+** Last update Wed Mar  4 21:59:31 2015 David Tran
 */
 
 #include "lemipc.h"
@@ -38,11 +38,11 @@ int		init_player(t_princ *lemip, char *team_number)
   tmp = (char *)(lemip->addrmap);
   while (good)
     {
-      lemip->player.pos_x = rand() % MAP_LEN;
-      lemip->player.pos_y = rand() % MAP_LEN;
-      if (tmp[lemip->player.pos_y * MAP_LEN + lemip->player.pos_x] == 0)
+      lemip->player.ia.x = rand() % MAP_LEN;
+      lemip->player.ia.y = rand() % MAP_LEN;
+      if (tmp[lemip->player.ia.y * MAP_LEN + lemip->player.ia.x] == 0)
 	{
-	  tmp[lemip->player.pos_y * MAP_LEN + lemip->player.pos_x] = lemip->player.team;
+	  tmp[lemip->player.ia.y * MAP_LEN + lemip->player.ia.x] = lemip->player.team;
 	  good = 0;
 	}
     }

@@ -5,7 +5,7 @@
 ** Login   <tran_0@epitech.net>
 **
 ** Started on  Sun Mar  1 14:50:31 2015 David Tran
-** Last update Wed Mar  4 11:55:44 2015 Jean-Baptiste Grégoire
+** Last update Wed Mar  4 22:21:56 2015 David Tran
 */
 
 #ifndef LEMIPC_H_
@@ -32,6 +32,7 @@
 # define MSG_BUF_SIZE	256
 # define MSG_TYPE	1
 # define WIN_LEN	1000
+# define MSG_GEN	999999
 
 # define IA_COOP_RAD	3
 
@@ -63,6 +64,7 @@ typedef struct		s_graph
   SDL_Surface		*screen;
   SDL_Surface		*quad;
   SDL_Rect		pos;
+  char			exit;
 }			t_graph;
 
 typedef struct		s_msgbuf

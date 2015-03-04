@@ -5,7 +5,7 @@
 ** Login   <tran_0@epitech.net>
 **
 ** Started on  Mon Mar  2 14:24:02 2015 David Tran
-** Last update Tue Mar  3 12:58:14 2015 Jean-Baptiste Grégoire
+** Last update Wed Mar  4 21:41:53 2015 David Tran
 */
 
 #include "lemipc.h"
@@ -13,14 +13,18 @@
 void		*launch_map_IA(void *iathread)
 {
   t_princ	*lemip;
-  t_msgbuf	msgbuf;
+  t_msgbuf	*msgbuf;
 
-  lemip = (t_princ *)(iathread);
-  if (msgrcv(lemip->msg_id, &msgbuf, sizeof(t_msgbuf), MSG_TYPE, 0) == -1)
-    {
-      perror("Can't receive message");
-      return ((void *)(EXIT_FAILURE));
-    }
+  msgbuf = NULL;
+  while (42)
+     {
+       lemip = (t_princ *)(iathread);
+       if (msgrcv(lemip->msg_id, msgbuf, sizeof(t_msgbuf), MSG_GEN, 0) == -1)
+	 {
+	   perror("Can't receive message");
+	   return ((void *)(EXIT_FAILURE));
+	 }
+     }
   return ((void *)(EXIT_SUCCESS));
 }
 
