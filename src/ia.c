@@ -5,7 +5,7 @@
 ** Login   <jibb@epitech.net>
 **
 ** Started on  Tue Mar  3 15:50:38 2015 Jean-Baptiste Grégoire
-** Last update Wed Mar  4 19:19:27 2015 Jean-Baptiste Grégoire
+** Last update Wed Mar  4 19:35:12 2015 Jean-Baptiste Grégoire
 */
 
 #include "lemipc.h"
@@ -169,13 +169,18 @@ int		ia_move(t_princ *lemip)
 {
   char		is_alive;
   t_pos		direction;
+  struct sembuf	sop;
   char		*tmp;
 
   tmp = (char *)(lemip->addrmap);
   direction.x = -1;
   direction.y = -1;
+  sop.sem_num = 1;
+  sop.sem_flg = 0;
   while (is_alive)
     {
+      sop.sem_op = 1;
+      semop(lemip->key, &sop, 1);
       ia_scan_map(lemip, lemip->player, &direction);
       if (tmp[direction.y * MAP_LEN + direction.x] != 0)
 	find_free_block(lemip->player, &direction);
@@ -190,6 +195,8 @@ int		ia_move(t_princ *lemip)
 	  send_msg("Aaaargh ! Je meurs !", lemip->key);
 	  is_alive = 0;
 	}
+      sop.sem_op = -1;
+      semop(lemip->key, &sop, 1);
     }
   return (0);
 }
