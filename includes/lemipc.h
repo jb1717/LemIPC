@@ -5,7 +5,7 @@
 ** Login   <tran_0@epitech.net>
 **
 ** Started on  Sun Mar  1 14:50:31 2015 David Tran
-** Last update Wed Mar  4 22:21:56 2015 David Tran
+** Last update Wed Mar  4 22:58:28 2015 Jean-Baptiste Grégoire
 */
 
 #ifndef LEMIPC_H_
@@ -21,6 +21,7 @@
 # include <strings.h>
 # include <unistd.h>
 # include <pthread.h>
+# include <math.h>
 # include <SDL/SDL.h>
 # include <SDL/SDL.h>
 # include <SDL/SDL_image.h>
@@ -82,5 +83,6 @@ typedef struct		s_radar
 void			launch_thread(t_princ *);
 int			init_player(t_princ *, char *);
 int			destroy_resources(t_princ *);
+int			ia_move(t_princ *);
 
 #endif /* !LEMIPC_H_ */

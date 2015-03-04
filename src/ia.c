@@ -5,7 +5,7 @@
 ** Login   <jibb@epitech.net>
 **
 ** Started on  Tue Mar  3 15:50:38 2015 Jean-Baptiste Grégoire
-** Last update Wed Mar  4 19:35:12 2015 Jean-Baptiste Grégoire
+** Last update Wed Mar  4 23:16:45 2015 Jean-Baptiste Grégoire
 */
 
 #include "lemipc.h"
@@ -19,7 +19,7 @@ int		set_pos_value(int *x, int *y, int x_value, int y_value)
 
 // Attiention le t_ia ne représente pas un joueur mais est une structure temporaire contenant
 // la position du début du scan (le coin du carré) ainsi que l'équipe de l'ia avec qui l'on effectue le scan
-void		ia_check_square(t_ia *start, int radius, t_radar *r, t_princ *lemip)
+int		ia_check_square(t_ia *start, int radius, t_radar *r, t_princ *lemip)
 {
   int		i;
   int		j;
@@ -29,15 +29,15 @@ void		ia_check_square(t_ia *start, int radius, t_radar *r, t_princ *lemip)
   i = 0;
   tmp = (char *)(lemip->addrmap);
   ret = 0;
-  while (i < radius && y + radius < MAP_LEN && i < MAP_LEN)
+  while (i < radius && start->ia.y + radius < MAP_LEN && i < MAP_LEN)
     {
       j = 0;
-      while (j < radius && x + radius < MAP_LEN)
+      while (j < radius && start->ia.x + radius < MAP_LEN)
 	{
-	  if (r->enemy->x == -1 && tmp[(start->y + i) * MAP_LEN + start->x + j] != start->team)
-	    ret += set_pos_value(&(r->enemy->x), &(r->enemy->y), start->x + j, start->y + i);
-	  if (r->friend->x == -1 && tmp[(start->y + i) * MAP_LEN + start->x + j] == start->team)
-	    ret += set_pos_value(&(r->friend->x), &(r->friend->y), start->x + j, start->y + i);
+	  if (r->enemy.x == -1 && tmp[(start->ia.y + i) * MAP_LEN + start->ia.x + j] != start->team)
+	    ret += set_pos_value(&(r->enemy.x), &(r->enemy.y), start->ia.x + j, start->ia.y + i);
+	  if (r->friend.x == -1 && tmp[(start->ia.y + i) * MAP_LEN + start->ia.x + j] == start->team)
+	    ret += set_pos_value(&(r->friend.x), &(r->friend.y), start->ia.x + j, start->ia.y + i);
 	  if (ret == 2)
 	    return (1);
 	  j++;
@@ -62,41 +62,40 @@ void		ia_take_direction(t_radar *r, t_ia *player, t_pos *direction)
   int		d1;
   int		d2;
 
-  d1 = (r->enemy->x != -1 ? sqrt(SQUARE(player->ia->x - r->enemy->x) +
-				 SQUARE(player->ia->y - r->enemy->y)) : -1);
-  d2 = (r->friend->x != -1 ? sqrt(SQUARE(player->ia->x - r->friend->x) +
-				  SQUARE(player->ia->y - r->friend->y)) : -1);
+  d1 = (r->enemy.x != -1 ? sqrt(SQUARE(player->ia.x - r->enemy.x) +
+				 SQUARE(player->ia.y - r->enemy.y)) : -1);
+  d2 = (r->friend.x != -1 ? sqrt(SQUARE(player->ia.x - r->friend.x) +
+				  SQUARE(player->ia.y - r->friend.y)) : -1);
   if (d2 != -1 && d2 <= IA_COOP_RAD)
     {
       // si il est avec au moins un allié
-      direction->x = calc_direction(player->ia->x, r->enemy->x);
-      direction->y = calc_direction(player->ia->y, r->enemy->y);
+      direction->x = calc_direction(player->ia.x, r->enemy.x);
+      direction->y = calc_direction(player->ia.y, r->enemy.y);
     }
   if (d1 != -1 && d2 > IA_COOP_RAD)
     {
       // si il est tout seul
-      direction->x = calc_direction(player->ia->x, r->friend->x);
-      direction->y = calc_direction(player->ia->y, r->friend->y);
+      direction->x = calc_direction(player->ia.x, r->friend.x);
+      direction->y = calc_direction(player->ia.y, r->friend.y);
     }
 }
 
 void		ia_scan_map(t_princ *lemip, t_ia *player, t_pos *direction)
 {
   int		radius;
-  char		end;
   t_ia		start;
   t_radar	r;
 
   radius = 1;
-  end = 0;
-  while (!end)
+  while (radius < MAP_LEN)
     {
-      start.x = (player->x - radius >= 0 ? player->x - radius : 0);
-      start.y = (player->y - radius >= 0 ? player->y - radius : 0);
+      printf("radius: %d\n", radius);
+      start.ia.x = (player->ia.x - radius >= 0 ? player->ia.x - radius : 0);
+      start.ia.y = (player->ia.y - radius >= 0 ? player->ia.y - radius : 0);
       start.team = player->team;
-      if (ia_check_quare(&start, radius, &r, lemip) == 1)
+      if (ia_check_square(&start, radius, &r, lemip) == 1)
 	{
-	  ia_take_direction(lemip, &r, player, direction);
+	  ia_take_direction(&r, player, direction);
 	  return ;
 	}
       radius++;
@@ -117,11 +116,11 @@ void		find_free_block(t_princ *lemip, t_pos *pos)
       j = 0;
       while (j < 3)
 	{
-	  idx = (lemip->player->ia->y - 1 + i) * MAP_LEN + lemip->player->ia->x - 1 + j;
+	  idx = (lemip->player.ia.y - 1 + i) * MAP_LEN + lemip->player.ia.x - 1 + j;
 	  if (tmp[idx] == 0)
 	    {
-	      pos->x = lemip->player->ia->x - 1 + j;
-	      pos->y = lemip->player->ia->y - 1 + i;
+	      pos->x = lemip->player.ia.x - 1 + j;
+	      pos->y = lemip->player.ia.y - 1 + i;
 	      return ;
 	    }
 	  j++;
@@ -146,7 +145,7 @@ int		is_dead(t_princ *lemip)
       j = 0;
       while (j < 3)
 	{
-	  idx = (lemip->player->ia->y - 1 + i) * MAP_LEN + lemip->player->ia->x - 1 + j;
+	  idx = (lemip->player.ia.y - 1 + i) * MAP_LEN + lemip->player.ia.x - 1 + j;
 	  if (tmp[idx] != 0)
 	    count++;
 	  j++;
@@ -156,12 +155,14 @@ int		is_dead(t_princ *lemip)
   return (count >= 2 ? 1 : 0);
 }
 
-void		send_msg(char *msg, int msgid)
+void		send_msg(char *msg, int msgid, long canal)
 {
   t_msgbuf	msgbuf;
+  char		*tmp;
 
+  tmp = strdup(msg);
   msgbuf.mtype = canal;
-  msgbuf.mdata = strdup(msg);
+  strcpy(tmp, &(*msgbuf.mdata));
   msgsnd(msgid, &msgbuf, sizeof(msgbuf), 0);
 }
 
@@ -177,22 +178,23 @@ int		ia_move(t_princ *lemip)
   direction.y = -1;
   sop.sem_num = 1;
   sop.sem_flg = 0;
+  is_alive = 1;
   while (is_alive)
     {
       sop.sem_op = 1;
       semop(lemip->key, &sop, 1);
-      ia_scan_map(lemip, lemip->player, &direction);
+      ia_scan_map(lemip, &(lemip->player), &direction);
       if (tmp[direction.y * MAP_LEN + direction.x] != 0)
-	find_free_block(lemip->player, &direction);
+	find_free_block(lemip, &direction);
       if (direction.x != -1)
 	{
-	  tmp[lemip->player->ia->y * MAP_LEN + lemip->player->ia->x] = 0;
-	  tmp[direction.y * MAP_LEN + direction.x] = lemip->player->ia->team;
+	  tmp[lemip->player.ia.y * MAP_LEN + lemip->player.ia.x] = 0;
+	  tmp[direction.y * MAP_LEN + direction.x] = lemip->player.team;
 	}
-      if (is_dead())
+      if (is_dead(lemip))
 	{
-	  tmp[lemip->player->ia->y * MAP_LEN + lemip->player->ia->x] = 0;
-	  send_msg("Aaaargh ! Je meurs !", lemip->key);
+	  tmp[lemip->player.ia.y * MAP_LEN + lemip->player.ia.x] = 0;
+	  send_msg("Aaaargh ! Je meurs !", lemip->key, MSG_GEN);
 	  is_alive = 0;
 	}
       sop.sem_op = -1;

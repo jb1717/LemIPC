@@ -5,7 +5,7 @@
 ## Login   <jibb@epitech.net>
 ##
 ## Started on  Fri Feb 27 11:27:47 2015 Jean-Baptiste Grégoire
-## Last update Wed Mar  4 22:15:27 2015 David Tran
+## Last update Wed Mar  4 22:58:08 2015 Jean-Baptiste Grégoire
 ##
 
 DEBUG		= 	yes
@@ -17,7 +17,8 @@ GRAPHIC		=	graphic_lemipc
 SRC		=	src/main.c		\
 			src/control_map.c	\
 			src/create_ia.c		\
-			src/destroy.c
+			src/destroy.c		\
+			src/ia.c
 
 SRC_GRAPH	=	src_graphic/graphic_main.c
 
@@ -42,7 +43,7 @@ else
 endif
 
 $(NAME):	$(OBJ)
-		$(CC) -o $(NAME) $(OBJ) -pthread
+		$(CC) -o $(NAME) $(OBJ) -pthread -lm
 
 $(GRAPHIC):	$(OBJ_GRAPH)
 		$(CC) $(CFLAGS) -o $(GRAPHIC) $(OBJ_GRAPH) -lSDL -lSDLmain -lSDL_gfx -lSDL_image -pthread

@@ -5,7 +5,7 @@
 ** Login   <tran_0@epitech.net>
 **
 ** Started on  Sun Mar  1 15:08:16 2015 David Tran
-** Last update Wed Mar  4 11:55:58 2015 Jean-Baptiste Grégoire
+** Last update Wed Mar  4 22:33:05 2015 Jean-Baptiste Grégoire
 */
 
 #include "lemipc.h"
@@ -90,5 +90,6 @@ int		main(int argc, char **argv)
       print_map(&lemip);
       destroy_resources(&lemip);
     }
+  ia_move(&lemip);
   return (EXIT_SUCCESS);
 }
