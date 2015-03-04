@@ -5,29 +5,29 @@
 ** Login   <tran_0@epitech.net>
 **
 ** Started on  Sun Mar  1 15:08:16 2015 David Tran
-** Last update Tue Mar  3 16:07:14 2015 Jean-Baptiste Grégoire
+** Last update Tue Mar  3 23:19:10 2015 David Tran
 */
 
 #include "lemipc.h"
 
 void		print_map(t_princ *lemip)
 {
-  char		*tmp;
-  int		i;
+  //  char		*tmp;
+  //int		i;
 
-  tmp = (char *)lemip->addrmap;
+  //  tmp = (char *)lemip->addrmap;
   while (42)
     {
-      i = 0;
+      /*      i = 0;
       while (i < MAP_LEN * MAP_LEN)
 	{
 	  printf("%d", tmp[i]);
 	  if ((i + 1) % MAP_LEN == 0)
 	    printf("\n");
 	  i++;
-	}
-      sleep(1);
-      system("/bin/clear");
+	  }*/
+      sleep(5);
+      //      system("/bin/clear");
     }
 }
 
