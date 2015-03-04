@@ -5,12 +5,177 @@
 ** Login   <jibb@epitech.net>
 **
 ** Started on  Tue Mar  3 15:50:38 2015 Jean-Baptiste Grégoire
-** Last update Tue Mar  3 16:09:34 2015 Jean-Baptiste Grégoire
+** Last update Wed Mar  4 14:28:33 2015 Jean-Baptiste Grégoire
 */
 
 #include "lemipc.h"
 
+int		set_pos_value(int *x, int *y, int x_value, int y_value)
+{
+  *x = x_value;
+  *y = y_value;
+  return (1);
+}
+
+// Attiention le t_ia ne représente pas un joueur mais est une structure temporaire contenant
+// la position du début du scan (le coin du carré) ainsi que l'équipe de l'ia avec qui l'on effectue le scan
+void		ia_check_square(t_ia *start, int radius, t_radar *r, t_princ *lemip)
+{
+  int		i;
+  int		j;
+  int		ret;
+  char		*tmp;
+
+  i = 0;
+  tmp = (char *)(lemip->addrmap);
+  ret = 0;
+  while (i < radius && y + radius < MAP_LEN && i < MAP_LEN)
+    {
+      j = 0;
+      while (j < radius && x + radius < MAP_LEN)
+	{
+	  if (r->enemy->x == -1 && tmp[(start->y + i) * MAP_LEN + start->x + j] != start->team)
+	    ret += set_pos_value(&(r->enemy->x), &(r->enemy->y), start->x + j, start->y + i);
+	  if (r->friend->x == -1 && tmp[(start->y + i) * MAP_LEN + start->x + j] == start->team)
+	    ret += set_pos_value(&(r->friend->x), &(r->friend->y), start->x + j, start->y + i);
+	  if (ret == 2)
+	    return (1);
+	  j++;
+	}
+      i++;
+    }
+  return (ret == 1 ? 1 : 0);
+}
+
+static int	calc_direction(int src, int dest)
+{
+  if (src == dest)
+    return (src);
+  else if (src < dest)
+    return (src + 1 > MAP_LEN ? src + 1 : src);
+  else
+    return (src - 1 < 0 ? src - 1 : 0);
+}
+
+void		ia_take_direction(t_radar *r, t_ia *player, t_pos *direction)
+{
+  int		d1;
+  int		d2;
+
+  d1 = (r->enemy->x != -1 ? sqrt(SQUARE(player->ia->x - r->enemy->x) +
+				 SQUARE(player->ia->y - r->enemy->y)) : -1);
+  d2 = (r->friend->x != -1 ? sqrt(SQUARE(player->ia->x - r->friend->x) +
+				  SQUARE(player->ia->y - r->friend->y)) : -1);
+  if (d2 != -1 && d2 <= IA_COOP_RAD)
+    {
+      // si il est avec au moins un allié
+      direction->x = calc_direction(player->ia->x, r->enemy->x);
+      direction->y = calc_direction(player->ia->y, r->enemy->y);
+    }
+  if (d1 != -1 && d2 > IA_COOP_RAD)
+    {
+      // si il est tout seul
+      direction->x = calc_direction(player->ia->x, r->friend->x);
+      direction->y = calc_direction(player->ia->y, r->friend->y);
+    }
+}
+
+void		ia_scan_map(t_princ *lemip, t_ia *player, t_pos *direction)
+{
+  int		radius;
+  char		end;
+  t_ia		start;
+  t_radar	r;
+
+  radius = 1;
+  end = 0;
+  while (!end)
+    {
+      start.x = (player->x - radius >= 0 ? player->x - radius : 0);
+      start.y = (player->y - radius >= 0 ? player->y - radius : 0);
+      start.team = player->team;
+      if (ia_check_quare(&start, radius, &r, lemip) == 1)
+	{
+	  ia_take_direction(lemip, &r, player, direction);
+	  return ;
+	}
+      radius++;
+    }
+}
+
+void		find_free_block(t_princ *lemip, t_pos *pos)
+{
+  int		i;
+  int		j;
+  int		idx;
+  char		*tmp;
+
+  i = 0;
+  tmp = (char *)(lemip->addrmap);
+  while (i < 3)
+    {
+      j = 0;
+      while (j < 3)
+	{
+	  idx = (lemip->player->ia->y - 1 + i) * MAP_LEN + lemip->player->ia->x - 1 + j;
+	  if (tmp[idx] == 0)
+	    {
+	      pos->x = lemip->player->ia->x - 1 + j;
+	      pos->y = lemip->player->ia->y - 1 + i;
+	      return ;
+	    }
+	  j++;
+	}
+      i++;
+    }
+}
+
+int		is_dead(t_princ *lemip)
+{
+  int		i;
+  int		j;
+  int		idx;
+  int		count;
+  char		*tmp;
+
+  i = 0;
+  count = 0;
+  tmp = (char *)(lemip->addrmap);
+  while (i < 3)
+    {
+      j = 0;
+      while (j < 3)
+	{
+	  idx = (lemip->player->ia->y - 1 + i) * MAP_LEN + lemip->player->ia->x - 1 + j;
+	  if (tmp[idx] != 0)
+	    count++;
+	  j++;
+	}
+      i++;
+    }
+  return (count >= 2 ? 1 : 0);
+}
+
 int		ia_move(t_princ *lemip)
 {
+  char		is_alive;
+  t_pos		direction;
+  char		*tmp;
 
+  tmp = (char *)(lemip->addrmap);
+  direction.x = -1;
+  direction.y = -1;
+  while (is_alive)
+    {
+      ia_scan_map(lemip, lemip->player, &direction);
+      if (tmp[direction.y * MAP_LEN + direction.x] != 0)
+	find_free_block(lemip->player, &direction);
+      if (direction.x != -1)
+	send_to_map(direction);
+      if (is_dead)
+	{
+	  send_to_map(/*je leave bitch*/);
+	  is_alive = 0;
+	}
+    }
 }
