@@ -5,7 +5,7 @@
 ** Login   <tran_0@epitech.net>
 **
 ** Started on  Sun Mar  1 15:08:16 2015 David Tran
-** Last update Tue Mar  3 16:07:14 2015 Jean-Baptiste Grégoire
+** Last update Tue Mar  3 23:58:07 2015 Jean-Baptiste Grégoire
 */
 
 #include "lemipc.h"
@@ -64,8 +64,8 @@ int		init_resources(t_princ *lemip)
   ret = init_memory(lemip);
   if ((lemip->msg_id = msgget(lemip->key, SHM_R | SHM_W)) == -1)
     lemip->msg_id = msgget(lemip->key, IPC_CREAT | SHM_R | SHM_W);
-  if ((lemip->sem_id = semget(lemip->key, 1, SHM_R | SHM_W)) == -1)
-    lemip->sem_id = semget(lemip->key, 1, IPC_CREAT | SHM_R | SHM_W);
+  /* if ((lemip->sem_id = semget(lemip->key, 1, SHM_R | SHM_W)) == -1) */
+  /*   lemip->sem_id = semget(lemip->key, 1, IPC_CREAT | SHM_R | SHM_W); */
   return (ret);
 }
 
