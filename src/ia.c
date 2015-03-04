@@ -5,7 +5,7 @@
 ** Login   <jibb@epitech.net>
 **
 ** Started on  Tue Mar  3 15:50:38 2015 Jean-Baptiste Grégoire
-** Last update Wed Mar  4 14:28:33 2015 Jean-Baptiste Grégoire
+** Last update Wed Mar  4 19:19:27 2015 Jean-Baptiste Grégoire
 */
 
 #include "lemipc.h"
@@ -156,6 +156,15 @@ int		is_dead(t_princ *lemip)
   return (count >= 2 ? 1 : 0);
 }
 
+void		send_msg(char *msg, int msgid)
+{
+  t_msgbuf	msgbuf;
+
+  msgbuf.mtype = canal;
+  msgbuf.mdata = strdup(msg);
+  msgsnd(msgid, &msgbuf, sizeof(msgbuf), 0);
+}
+
 int		ia_move(t_princ *lemip)
 {
   char		is_alive;
@@ -171,11 +180,16 @@ int		ia_move(t_princ *lemip)
       if (tmp[direction.y * MAP_LEN + direction.x] != 0)
 	find_free_block(lemip->player, &direction);
       if (direction.x != -1)
-	send_to_map(direction);
-      if (is_dead)
 	{
-	  send_to_map(/*je leave bitch*/);
+	  tmp[lemip->player->ia->y * MAP_LEN + lemip->player->ia->x] = 0;
+	  tmp[direction.y * MAP_LEN + direction.x] = lemip->player->ia->team;
+	}
+      if (is_dead())
+	{
+	  tmp[lemip->player->ia->y * MAP_LEN + lemip->player->ia->x] = 0;
+	  send_msg("Aaaargh ! Je meurs !", lemip->key);
 	  is_alive = 0;
 	}
     }
+  return (0);
 }
