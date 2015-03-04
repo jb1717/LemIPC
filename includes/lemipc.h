@@ -5,7 +5,7 @@
 ** Login   <tran_0@epitech.net>
 **
 ** Started on  Sun Mar  1 14:50:31 2015 David Tran
-** Last update Tue Mar  3 16:01:52 2015 Jean-Baptiste Grégoire
+** Last update Wed Mar  4 11:53:39 2015 Jean-Baptiste Grégoire
 */
 
 #ifndef LEMIPC_H_
@@ -23,14 +23,22 @@
 # include <pthread.h>
 
 # define UNUSED(a)    	__attribute__((UNUSED))a
+# define SQUARE(a)	(a) * (a)
 # define MAP_LEN	10
 # define MSG_BUF_SIZE	256
 # define MSG_TYPE	1
 
+# define IA_COOP_RAD	3
+
+typedef struct		s_pos
+{
+  int			x;
+  int			y;
+}			t_pos;
+
 typedef struct		s_ia
 {
-  int			pos_x;
-  int			pos_y;
+  t_pos			ia;
   char			team;
 }			t_ia;
 
@@ -49,6 +57,12 @@ typedef struct		s_msgbuf
   long			mtype;
   char			mdata[MSG_BUF_SIZE];
 }			t_msgbuf;
+
+typedef struct		s_radar
+{
+  t_pos			enemy;
+  t_pos			friend;
+}			t_radar;
 
 void			launch_thread(t_princ *);
 int			init_player(t_princ *, char *);
