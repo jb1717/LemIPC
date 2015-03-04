@@ -5,7 +5,7 @@
 ** Login   <tran_0@epitech.net>
 **
 ** Started on  Sun Mar  1 14:50:31 2015 David Tran
-** Last update Wed Mar  4 11:53:39 2015 Jean-Baptiste Grégoire
+** Last update Wed Mar  4 11:55:44 2015 Jean-Baptiste Grégoire
 */
 
 #ifndef LEMIPC_H_
@@ -21,12 +21,17 @@
 # include <strings.h>
 # include <unistd.h>
 # include <pthread.h>
+# include <SDL/SDL.h>
+# include <SDL/SDL.h>
+# include <SDL/SDL_image.h>
+# include <SDL/SDL_gfxPrimitives.h>
 
 # define UNUSED(a)    	__attribute__((UNUSED))a
 # define SQUARE(a)	(a) * (a)
 # define MAP_LEN	10
 # define MSG_BUF_SIZE	256
 # define MSG_TYPE	1
+# define WIN_LEN	1000
 
 # define IA_COOP_RAD	3
 
@@ -51,6 +56,14 @@ typedef struct		s_princ
   void			*addrmap;
   t_ia			player;
 }			t_princ;
+
+typedef struct		s_graph
+{
+  t_princ		princ;
+  SDL_Surface		*screen;
+  SDL_Surface		*quad;
+  SDL_Rect		pos;
+}			t_graph;
 
 typedef struct		s_msgbuf
 {

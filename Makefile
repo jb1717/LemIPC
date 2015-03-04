@@ -5,19 +5,25 @@
 ## Login   <jibb@epitech.net>
 ##
 ## Started on  Fri Feb 27 11:27:47 2015 Jean-Baptiste Grégoire
-## Last update Tue Mar  3 11:36:44 2015 Jean-Baptiste Grégoire
+## Last update Wed Mar  4 01:01:46 2015 David Tran
 ##
 
-DEBUG		= 	no
+DEBUG		= 	yes
 
 NAME		=	lemipc
+
+GRAPHIC		=	graphic_lemipc
 
 SRC		=	src/main.c		\
 			src/control_map.c	\
 			src/create_ia.c		\
 			src/destroy.c
 
+SRC_GRAPH	=	src_graphic/graphic_main.c
+
 OBJ		=	$(SRC:.c=.o)
+
+OBJ_GRAPH	=	$(SRC_GRAPH:.c=.o)
 
 RM		=	rm -f
 
@@ -38,10 +44,16 @@ endif
 $(NAME):	$(OBJ)
 		$(CC) -o $(NAME) $(OBJ) -pthread
 
+$(GRAPHIC):	$(OBJ_GRAPH)
+		$(CC) $(CFLAGS) -o $(GRAPHIC) $(OBJ_GRAPH) -lSDL -lSDLmain -lSDL_gfx -lSDL_image
+
+graphic:	$(GRAPHIC)
+
 all:		$(NAME)
 
 clean:
 		$(RM) $(OBJ)
+		$(RM) $(OBJ_GRAPH)
 
 fclean:		clean
 		$(RM) $(NAME)
