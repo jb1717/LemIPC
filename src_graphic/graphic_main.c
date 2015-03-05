@@ -5,7 +5,7 @@
 ** Login   <tran_0@epitech.net>
 ** 
 ** Started on  Tue Mar  3 21:47:51 2015 David Tran
-** Last update Wed Mar  4 22:21:39 2015 David Tran
+** Last update Thu Mar  5 15:24:18 2015 David Tran
 */
 
 #include "lemipc.h"
@@ -122,6 +122,7 @@ int		main()
       if (graph.exit == 1)
 	return (EXIT_SUCCESS);
       draw_shared_map(&graph);
+      draw_quadra(&graph);
       sleep(1);
     }
   return (EXIT_SUCCESS);
