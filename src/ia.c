@@ -5,7 +5,7 @@
 ** Login   <jibb@epitech.net>
 **
 ** Started on  Tue Mar  3 15:50:38 2015 Jean-Baptiste Grégoire
-** Last update Wed Mar  4 23:16:45 2015 Jean-Baptiste Grégoire
+** Last update Thu Mar  5 15:47:10 2015 Jean-Baptiste Grégoire
 */
 
 #include "lemipc.h"
@@ -29,10 +29,10 @@ int		ia_check_square(t_ia *start, int radius, t_radar *r, t_princ *lemip)
   i = 0;
   tmp = (char *)(lemip->addrmap);
   ret = 0;
-  while (i < radius && start->ia.y + radius < MAP_LEN && i < MAP_LEN)
+  while (i < 2 * radius + 1 && start->ia.y + radius < MAP_LEN && i < MAP_LEN)
     {
       j = 0;
-      while (j < radius && start->ia.x + radius < MAP_LEN)
+      while (j < 2 * radius + 1 && start->ia.x + radius < MAP_LEN && j < MAP_LEN)
 	{
 	  if (r->enemy.x == -1 && tmp[(start->ia.y + i) * MAP_LEN + start->ia.x + j] != start->team)
 	    ret += set_pos_value(&(r->enemy.x), &(r->enemy.y), start->ia.x + j, start->ia.y + i);
