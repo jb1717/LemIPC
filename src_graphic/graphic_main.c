@@ -5,7 +5,7 @@
 ** Login   <tran_0@epitech.net>
 ** 
 ** Started on  Tue Mar  3 21:47:51 2015 David Tran
-** Last update Thu Mar  5 15:24:18 2015 David Tran
+** Last update Thu Mar  5 16:50:21 2015 David Tran
 */
 
 #include "lemipc.h"
@@ -44,18 +44,20 @@ void		draw_shared_map(t_graph *graph)
       x = 0;
       while (x < MAP_LEN)
 	{
+	  graph->pos.x = WIN_LEN / MAP_LEN * x;
+	  graph->pos.y = WIN_LEN / MAP_LEN * y;
+	  graph->pos.w = WIN_LEN / MAP_LEN;
+	  graph->pos.h = WIN_LEN / MAP_LEN;
 	  if (str[y * MAP_LEN + x] != 0)
-	    {
-	      graph->pos.x = WIN_LEN / MAP_LEN * x;
-	      graph->pos.y = WIN_LEN / MAP_LEN * y;
-	      graph->pos.w = WIN_LEN / MAP_LEN;
-	      graph->pos.h = WIN_LEN / MAP_LEN;
-	      SDL_FillRect
-		(graph->screen, &graph->pos, SDL_MapRGB
-		 (graph->screen->format, (str[y * MAP_LEN + x] * 15) % 255,
-		  (str[y * MAP_LEN + x] * 52) % 255,
-		  (str[y * MAP_LEN + x] * 42)) % 255);
-	    }
+	    SDL_FillRect
+	      (graph->screen, &graph->pos, SDL_MapRGB
+	       (graph->screen->format, (str[y * MAP_LEN + x] * 15) % 255,
+		(str[y * MAP_LEN + x] * 52) % 255,
+		(str[y * MAP_LEN + x] * 42) % 255));
+	  else
+	    SDL_FillRect
+	      (graph->screen, &graph->pos, SDL_MapRGB
+	       (graph->screen->format, 0, 0, 0));
 	  x++;
 	}
       y++;

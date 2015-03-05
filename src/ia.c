@@ -5,7 +5,7 @@
 ** Login   <jibb@epitech.net>
 **
 ** Started on  Tue Mar  3 15:50:38 2015 Jean-Baptiste Grégoire
-** Last update Thu Mar  5 15:48:30 2015 Jean-Baptiste Grégoire
+** Last update Thu Mar  5 16:55:11 2015 David Tran
 */
 
 #include "lemipc.h"
@@ -30,24 +30,26 @@ int		ia_check_square(t_ia *start, int radius, t_radar *r, t_princ *lemip)
   tmp = (char *)(lemip->addrmap);
   ret = 0;
   while (i < 2 * radius + 1 && start->ia.y + radius < MAP_LEN && i < MAP_LEN)
-  printf("enter\n");
     {
       j = 0;
       while (j < 2 * radius + 1 && start->ia.x + radius < MAP_LEN && j < MAP_LEN)
 	{
 	  printf("ret : %d -> enemy : %d -> me : %d -> team : %d -> team_case : %d -> x : %d, x_a : %d\n", ret, (start->ia.y + i) * MAP_LEN + start->ia.x + j, start->ia.y * MAP_LEN + start->ia.x, start->team, tmp[(start->ia.y + i) * MAP_LEN + start->ia.x + j], r->enemy.x, r->friend.x);
 	  if (r->enemy.x == -1 && tmp[(start->ia.y + i) * MAP_LEN + start->ia.x + j] != start->team && tmp[(start->ia.y + i) * MAP_LEN + start->ia.x + j] != 0)
-	    ret += set_pos_value(&(r->enemy.x), &(r->enemy.y), start->ia.x + j, start->ia.y + i);
+	    {
+	      set_pos_value(&(r->enemy.x), &(r->enemy.y), start->ia.x + j, start->ia.y + i);
+	      ret = 2;
+	    }
 	  if (r->friend.x == -1 && tmp[(start->ia.y + i) * MAP_LEN + start->ia.x + j] == start->team)
-	    ret += set_pos_value(&(r->friend.x), &(r->friend.y), start->ia.x + j, start->ia.y + i);
-	  if (ret == 2)
-	    return (1);
+	    {
+	      set_pos_value(&(r->friend.x), &(r->friend.y), start->ia.x + j, start->ia.y + i);
+	      ret = 1;
+	    }
 	  j++;
-	  sleep(0.5);
 	}
       i++;
     }
-  return (ret == 1 ? 1 : 0);
+  return (ret);
 }
 
 static int	calc_direction(int src, int dest)
@@ -97,13 +99,13 @@ void		ia_scan_map(t_princ *lemip, t_ia *player, t_pos *direction)
   r.friend.y = -1;
   while (radius < MAP_LEN)
     {
-      //      printf("radius: %d\n", radius);
+      printf("radius: %d\n", radius);
       start.ia.x = (player->ia.x - radius >= 0 ? player->ia.x - radius : 0);
       start.ia.y = (player->ia.y - radius >= 0 ? player->ia.y - radius : 0);
       start.team = player->team;
       if (ia_check_square(&start, radius, &r, lemip) == 1)
 	{
-	  printf("inside\n");
+	  sleep(1);
 	  ia_take_direction(&r, player, direction);
 	  return ;
 	}
@@ -198,6 +200,8 @@ int		ia_move(t_princ *lemip)
       if (direction.x != -1)
 	{
 	  tmp[lemip->player.ia.y * MAP_LEN + lemip->player.ia.x] = 0;
+	  lemip->player.ia.x = direction.x;
+	  lemip->player.ia.y = direction.y;
 	  tmp[direction.y * MAP_LEN + direction.x] = lemip->player.team;
 	}
       if (is_dead(lemip))
