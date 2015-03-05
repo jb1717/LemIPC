@@ -5,7 +5,7 @@
 ** Login   <tran_0@epitech.net>
 **
 ** Started on  Sun Mar  1 14:50:31 2015 David Tran
-** Last update Wed Mar  4 22:58:28 2015 Jean-Baptiste Grégoire
+** Last update Thu Mar  5 21:53:14 2015 David Tran
 */
 
 #ifndef LEMIPC_H_
@@ -18,6 +18,7 @@
 # include <sys/sem.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <time.h>
 # include <strings.h>
 # include <unistd.h>
 # include <pthread.h>
