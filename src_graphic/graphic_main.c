@@ -1,11 +1,11 @@
 /*
 ** graphic_main.c for lemipc in /home/tran_0/rendu/PSU_2014_lemipc/src
-** 
+**
 ** Made by David Tran
 ** Login   <tran_0@epitech.net>
-** 
+**
 ** Started on  Tue Mar  3 21:47:51 2015 David Tran
-** Last update Thu Mar  5 16:50:21 2015 David Tran
+** Last update Fri Mar  6 17:46:13 2015 Jean-Baptiste Grégoire
 */
 
 #include "lemipc.h"
@@ -95,7 +95,7 @@ void		*event_SDL(void *graphs)
   while (42)
     {
       SDL_WaitEvent(&event);
-      if (event.key.keysym.sym == SDLK_ESCAPE)
+      if (event.key.keysym.sym == SDLK_ESCAPE || event.type == SDL_QUIT)
 	{
 	  graph->exit = 1;
 	  SDL_FreeSurface(graph->screen);
