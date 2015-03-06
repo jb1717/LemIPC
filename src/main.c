@@ -1,11 +1,11 @@
 /*
-1;2802;0c** main.c for main in /home/tran_0/rendu/PSU_2014_lemipc
+** main.c for main in /home/tran_0/rendu/PSU_2014_lemipc
 **
 ** Made by David Tran
 ** Login   <tran_0@epitech.net>
 **
 ** Started on  Sun Mar  1 15:08:16 2015 David Tran
-** Last update Thu Mar  5 22:08:39 2015 David Tran
+** Last update Fri Mar  6 20:56:49 2015 David Tran
 */
 
 #include "lemipc.h"
@@ -36,6 +36,8 @@ int		init_memory(t_princ *lemip)
   int		ret;
 
   ret = EXIT_SUCCESS;
+  lemip->sops.sem_num = 0;
+  lemip->sops.sem_flg = 0;
   if ((lemip->shm_id = shmget(lemip->key,
 			      MAP_LEN * MAP_LEN, SHM_R | SHM_W)) == -1)
     {
@@ -64,8 +66,11 @@ int		init_resources(t_princ *lemip)
   ret = init_memory(lemip);
   if ((lemip->msg_id = msgget(lemip->key, SHM_R | SHM_W)) == -1)
     lemip->msg_id = msgget(lemip->key, IPC_CREAT | SHM_R | SHM_W);
-  /* if ((lemip->sem_id = semget(lemip->key, 1, SHM_R | SHM_W)) == -1) */
-  /*   lemip->sem_id = semget(lemip->key, 1, IPC_CREAT | SHM_R | SHM_W); */
+  if ((lemip->sem_id = semget(lemip->key, 1, SHM_R | SHM_W)) == -1)
+    {
+      lemip->sem_id = semget(lemip->key, 1, IPC_CREAT | SHM_R | SHM_W);
+      semctl(lemip->sem_id, 0, SETVAL, 1);
+    }
   return (ret);
 }
 
@@ -73,6 +78,7 @@ int		main(int argc, char **argv)
 {
   t_princ	lemip;
   int		ret;
+  pthread_t	take_map;
 
   if (argc != 2)
     {
@@ -87,9 +93,13 @@ int		main(int argc, char **argv)
   init_player(&lemip, argv[1]);
   if (ret == 2)
     {
+      if (pthread_create(&take_map, NULL, ia_thread, &lemip) != 0)
+	return (EXIT_FAILURE);
+      pthread_join(take_map, NULL);
       print_map(&lemip);
       destroy_resources(&lemip);
     }
-  ia_easy(&lemip);
+  else
+    ia_easy(&lemip);
   return (EXIT_SUCCESS);
 }
