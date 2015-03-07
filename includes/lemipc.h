@@ -5,7 +5,7 @@
 ** Login   <tran_0@epitech.net>
 **
 ** Started on  Sun Mar  1 14:50:31 2015 David Tran
-** Last update Sat Mar  7 19:10:14 2015 Jean-Baptiste Grégoire
+** Last update Sat Mar  7 19:21:31 2015 Jean-Baptiste Grégoire
 */
 
 #ifndef LEMIPC_H_
@@ -50,6 +50,13 @@ typedef struct		s_ia
   char			team;
 }			t_ia;
 
+typedef struct		s_msgbuf
+{
+  long			mtype;
+  char			mdata[MSG_BUF_SIZE];
+  char			team;
+}			t_msgbuf;
+
 typedef struct		s_princ
 {
   key_t			key;
@@ -59,6 +66,8 @@ typedef struct		s_princ
   void			*addrmap;
   char			*map;
   t_ia			player;
+  struct sembuf		sops;
+  t_msgbuf		msgbuf;
 }			t_princ;
 
 typedef struct		s_graph
@@ -69,12 +78,6 @@ typedef struct		s_graph
   SDL_Rect		pos;
   char			exit;
 }			t_graph;
-
-typedef struct		s_msgbuf
-{
-  long			mtype;
-  char			mdata[MSG_BUF_SIZE];
-}			t_msgbuf;
 
 typedef struct		s_radar
 {
@@ -93,5 +96,6 @@ int			set_pos_value(int *, int *, int, int);
 int			calc_direction(int, int);
 int			is_dead(t_princ *);
 int			ia_move(t_princ *);
+void			*ia_thread(void *);
 
 #endif /* !LEMIPC_H_ */

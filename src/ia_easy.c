@@ -5,7 +5,7 @@
 ** Login   <tran_0@epitech.net>
 ** 
 ** Started on  Thu Mar  5 18:27:11 2015 David Tran
-** Last update Thu Mar  5 22:46:01 2015 David Tran
+** Last update Sat Mar  7 16:56:52 2015 David Tran
 */
 
 #include "lemipc.h"
@@ -67,12 +67,28 @@ int	ia_easy(t_princ *lemip)
   tmp = (char *)lemip->addrmap;
   while (42)
     {
+      if (tmp[MAP_LEN * MAP_LEN + 1] == -1)
+	return (EXIT_SUCCESS);
+      lemip->sops.sem_op = -1;
+      if (semop(lemip->sem_id, &lemip->sops, 1) == -1)
+	return (EXIT_FAILURE);
       sleep(1);
+      lemip->sops.sem_op = 1;
       if (is_alive(lemip) > 1)
 	{
 	  tmp[lemip->player.ia.y * MAP_LEN + lemip->player.ia.x] = 0;
+	  if (semop(lemip->sem_id, &lemip->sops, 1) == -1)
+	    return (-1);
 	  return (2);
 	}
       move_ia(lemip);
+      if (semop(lemip->sem_id, &lemip->sops, 1) == -1)
+	return (-1);
     }
+}
+
+void	*ia_thread(void *princ)
+{
+  ia_easy((t_princ *)princ);
+  return (NULL);
 }
