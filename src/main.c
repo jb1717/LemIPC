@@ -1,11 +1,11 @@
 /*
-1;2802;0c** main.c for main in /home/tran_0/rendu/PSU_2014_lemipc
+** main.c for main in /home/tran_0/rendu/PSU_2014_lemipc
 **
 ** Made by David Tran
 ** Login   <tran_0@epitech.net>
 **
 ** Started on  Sun Mar  1 15:08:16 2015 David Tran
-** Last update Thu Mar  5 22:08:39 2015 David Tran
+** Last update Sat Mar  7 18:12:04 2015 Jean-Baptiste Grégoire
 */
 
 #include "lemipc.h"
@@ -16,6 +16,7 @@ void		print_map(t_princ *lemip)
   //int		i;
 
   //  tmp = (char *)lemip->addrmap;
+  (void)(lemip);
   while (42)
     {
       /*      i = 0;
@@ -61,7 +62,9 @@ int		init_resources(t_princ *lemip)
   srand(time(NULL));
   if ((lemip->key = ftok(getcwd(path, 256), 0)) == -1)
     return (EXIT_FAILURE);
-  ret = init_memory(lemip);
+  if ((ret = init_memory(lemip)) == EXIT_FAILURE)
+    return (EXIT_FAILURE);
+  lemip->map = (char *)(lemip->addrmap);
   if ((lemip->msg_id = msgget(lemip->key, SHM_R | SHM_W)) == -1)
     lemip->msg_id = msgget(lemip->key, IPC_CREAT | SHM_R | SHM_W);
   /* if ((lemip->sem_id = semget(lemip->key, 1, SHM_R | SHM_W)) == -1) */
@@ -90,6 +93,6 @@ int		main(int argc, char **argv)
       print_map(&lemip);
       destroy_resources(&lemip);
     }
-  ia_easy(&lemip);
+  ia_intermediate(&lemip);
   return (EXIT_SUCCESS);
 }

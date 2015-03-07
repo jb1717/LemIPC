@@ -5,7 +5,7 @@
 ## Login   <jibb@epitech.net>
 ##
 ## Started on  Fri Feb 27 11:27:47 2015 Jean-Baptiste Grégoire
-## Last update Thu Mar  5 22:09:22 2015 David Tran
+## Last update Sat Mar  7 19:09:32 2015 Jean-Baptiste Grégoire
 ##
 
 DEBUG		= 	yes
@@ -20,6 +20,8 @@ SRC		=	src/main.c		\
 			src/destroy.c		\
 			src/ia.c		\
 			src/ia_easy.c		\
+			src/ia_utils.c		\
+			src/ia_move.c
 
 SRC_GRAPH	=	src_graphic/graphic_main.c
 

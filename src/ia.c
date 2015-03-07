@@ -5,61 +5,47 @@
 ** Login   <jibb@epitech.net>
 **
 ** Started on  Tue Mar  3 15:50:38 2015 Jean-Baptiste Grégoire
-** Last update Thu Mar  5 16:55:11 2015 David Tran
+** Last update Sat Mar  7 19:07:32 2015 Jean-Baptiste Grégoire
 */
 
 #include "lemipc.h"
 
-int		set_pos_value(int *x, int *y, int x_value, int y_value)
+void		ia_try_find_proc(t_ia *s, t_radar *r, t_princ *lemip, t_pos *pos)
 {
-  *x = x_value;
-  *y = y_value;
-  return (1);
+  int		idx;
+
+  idx = (s->ia.y + pos->y) * MAP_LEN + s->ia.x + pos->x;
+  if (r->enemy.x == -1 && s->ia.x + pos->x >= 0 && s->ia.y + pos->y >= 0 &&
+      lemip->map[idx] != s->team && lemip->map[idx] != 0)
+    set_pos_value(&(r->enemy.x), &(r->enemy.y),
+		  s->ia.x + pos->x, s->ia.y + pos->y);
+  if (r->friend.x == -1 && s->ia.x + pos->x >= 0 && s->ia.y + pos->y >= 0 &&
+      lemip->map[idx] == s->team && (s->ia.x + pos->x != lemip->player.ia.x ||
+				     s->ia.y + pos->y != lemip->player.ia.y))
+    set_pos_value(&(r->friend.x), &(r->friend.y), s->ia.x + pos->x,
+		  s->ia.y + pos->y);
 }
 
-// Attiention le t_ia ne représente pas un joueur mais est une structure temporaire contenant
-// la position du début du scan (le coin du carré) ainsi que l'équipe de l'ia avec qui l'on effectue le scan
-int		ia_check_square(t_ia *start, int radius, t_radar *r, t_princ *lemip)
+int		ia_check_square(t_ia *s, int radius, t_radar *r, t_princ *lemip)
 {
-  int		i;
-  int		j;
-  int		ret;
-  char		*tmp;
+  t_pos		pos;
 
-  i = 0;
-  tmp = (char *)(lemip->addrmap);
-  ret = 0;
-  while (i < 2 * radius + 1 && start->ia.y + radius < MAP_LEN && i < MAP_LEN)
+  pos.y = 0;
+  while (pos.y < 2 * radius + 1 && s->ia.y + pos.y < MAP_LEN)
     {
-      j = 0;
-      while (j < 2 * radius + 1 && start->ia.x + radius < MAP_LEN && j < MAP_LEN)
+      pos.x = 0;
+      while (pos.x < 2 * radius + 1 && s->ia.x + pos.x < MAP_LEN)
 	{
-	  printf("ret : %d -> enemy : %d -> me : %d -> team : %d -> team_case : %d -> x : %d, x_a : %d\n", ret, (start->ia.y + i) * MAP_LEN + start->ia.x + j, start->ia.y * MAP_LEN + start->ia.x, start->team, tmp[(start->ia.y + i) * MAP_LEN + start->ia.x + j], r->enemy.x, r->friend.x);
-	  if (r->enemy.x == -1 && tmp[(start->ia.y + i) * MAP_LEN + start->ia.x + j] != start->team && tmp[(start->ia.y + i) * MAP_LEN + start->ia.x + j] != 0)
-	    {
-	      set_pos_value(&(r->enemy.x), &(r->enemy.y), start->ia.x + j, start->ia.y + i);
-	      ret = 2;
-	    }
-	  if (r->friend.x == -1 && tmp[(start->ia.y + i) * MAP_LEN + start->ia.x + j] == start->team)
-	    {
-	      set_pos_value(&(r->friend.x), &(r->friend.y), start->ia.x + j, start->ia.y + i);
-	      ret = 1;
-	    }
-	  j++;
+	  ia_try_find_proc(s, r, lemip, &pos);
+	  pos.x++;
 	}
-      i++;
+      pos.y++;
     }
-  return (ret);
-}
-
-static int	calc_direction(int src, int dest)
-{
-  if (src == dest)
-    return (src);
-  else if (src < dest)
-    return (src + 1 > MAP_LEN ? src + 1 : src);
-  else
-    return (src - 1 < 0 ? src - 1 : 0);
+  if (r->enemy.x != -1 && r->friend.x != -1)
+    return (2);
+  if (r->enemy.x != -1)
+    return (1);
+  return (0);
 }
 
 void		ia_take_direction(t_radar *r, t_ia *player, t_pos *direction)
@@ -73,17 +59,19 @@ void		ia_take_direction(t_radar *r, t_ia *player, t_pos *direction)
 				  SQUARE(player->ia.y - r->friend.y)) : -1);
   if (d2 != -1 && d2 <= IA_COOP_RAD)
     {
-      // si il est avec au moins un allié
       direction->x = calc_direction(player->ia.x, r->enemy.x);
       direction->y = calc_direction(player->ia.y, r->enemy.y);
     }
-  if (d1 != -1 && d2 > IA_COOP_RAD)
+  if ((d1 != -1 && d2 > IA_COOP_RAD) || (d1 == -1 && d2 != -1))
     {
-      // si il est tout seul
       direction->x = calc_direction(player->ia.x, r->friend.x);
       direction->y = calc_direction(player->ia.y, r->friend.y);
     }
-  //  printf("x : %d, y : %d\n", direction->x, direction->y);
+  if (d1 == -1 && d2 == -1)
+    {
+      direction->x = player->ia.x;
+      direction->y = player->ia.y;
+    }
 }
 
 void		ia_scan_map(t_princ *lemip, t_ia *player, t_pos *direction)
@@ -99,11 +87,10 @@ void		ia_scan_map(t_princ *lemip, t_ia *player, t_pos *direction)
   r.friend.y = -1;
   while (radius < MAP_LEN)
     {
-      printf("radius: %d\n", radius);
-      start.ia.x = (player->ia.x - radius >= 0 ? player->ia.x - radius : 0);
-      start.ia.y = (player->ia.y - radius >= 0 ? player->ia.y - radius : 0);
+      start.ia.x = player->ia.x - radius;
+      start.ia.y = player->ia.y - radius;
       start.team = player->team;
-      if (ia_check_square(&start, radius, &r, lemip) == 1)
+      if (ia_check_square(&start, radius, &r, lemip) == 2)
 	{
 	  sleep(1);
 	  ia_take_direction(&r, player, direction);
@@ -111,82 +98,14 @@ void		ia_scan_map(t_princ *lemip, t_ia *player, t_pos *direction)
 	}
       radius++;
     }
+  ia_take_direction(&r, player, direction);
 }
 
-void		find_free_block(t_princ *lemip, t_pos *pos)
-{
-  int		i;
-  int		j;
-  int		idx;
-  char		*tmp;
-
-  i = 0;
-  tmp = (char *)(lemip->addrmap);
-  while (i < 3)
-    {
-      j = 0;
-      while (j < 3)
-	{
-	  idx = (lemip->player.ia.y - 1 + i) * MAP_LEN + lemip->player.ia.x - 1 + j;
-	  if (tmp[idx] == 0)
-	    {
-	      pos->x = lemip->player.ia.x - 1 + j;
-	      pos->y = lemip->player.ia.y - 1 + i;
-	      return ;
-	    }
-	  j++;
-	}
-      i++;
-    }
-}
-
-int		is_dead(t_princ *lemip)
-{
-  int		i;
-  int		j;
-  int		idx;
-  int		count;
-  char		*tmp;
-
-  i = 0;
-  count = 0;
-  tmp = (char *)(lemip->addrmap);
-  while (i < 3)
-    {
-      j = 0;
-      while (j < 3)
-	{
-	  idx = (lemip->player.ia.y - 1 + i) * MAP_LEN + lemip->player.ia.x - 1 + j;
-	  if (tmp[idx] != 0)
-	    count++;
-	  j++;
-	}
-      i++;
-    }
-  return (count >= 2 ? 1 : 0);
-}
-
-void		send_msg(char *msg, int msgid, long canal)
-{
-  t_msgbuf	msgbuf;
-  char		*tmp;
-
-  tmp = strdup(msg);
-  msgbuf.mtype = canal;
-  strcpy(tmp, &(*msgbuf.mdata));
-  msgsnd(msgid, &msgbuf, sizeof(msgbuf), 0);
-}
-
-int		ia_move(t_princ *lemip)
+int		ia_intermediate(t_princ *lemip)
 {
   char		is_alive;
-  t_pos		direction;
   struct sembuf	sop;
-  char		*tmp;
 
-  tmp = (char *)(lemip->addrmap);
-  direction.x = -1;
-  direction.y = -1;
   sop.sem_num = 1;
   sop.sem_flg = 0;
   is_alive = 1;
@@ -194,22 +113,14 @@ int		ia_move(t_princ *lemip)
     {
       sop.sem_op = 1;
       semop(lemip->key, &sop, 1);
-      ia_scan_map(lemip, &(lemip->player), &direction);
-      if (tmp[direction.y * MAP_LEN + direction.x] != 0)
-	find_free_block(lemip, &direction);
-      if (direction.x != -1)
-	{
-	  tmp[lemip->player.ia.y * MAP_LEN + lemip->player.ia.x] = 0;
-	  lemip->player.ia.x = direction.x;
-	  lemip->player.ia.y = direction.y;
-	  tmp[direction.y * MAP_LEN + direction.x] = lemip->player.team;
-	}
       if (is_dead(lemip))
 	{
-	  tmp[lemip->player.ia.y * MAP_LEN + lemip->player.ia.x] = 0;
+	  lemip->map[lemip->player.ia.y * MAP_LEN + lemip->player.ia.x] = 0;
 	  send_msg("Aaaargh ! Je meurs !", lemip->key, MSG_GEN);
 	  is_alive = 0;
 	}
+      else
+	ia_move(lemip);
       sop.sem_op = -1;
       semop(lemip->key, &sop, 1);
     }
