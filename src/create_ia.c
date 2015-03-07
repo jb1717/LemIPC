@@ -5,7 +5,7 @@
 ** Login   <jibb@epitech.net>
 **
 ** Started on  Tue Mar  3 10:53:23 2015 Jean-Baptiste Grégoire
-** Last update Wed Mar  4 21:59:31 2015 David Tran
+** Last update Sat Mar  7 22:56:07 2015 David Tran
 */
 
 #include "lemipc.h"
@@ -14,20 +14,25 @@ static int	get_team_number(char *team_number)
 {
   int		tmp;
 
-  if ((tmp = atoi(team_number)) == 0)
+  if (!team_number)
+    tmp = TEAM_DEF;
+  else
     {
-      printf("Invalid team number: must be different from zero\n");
-      return (-1);
-    }
-  if (tmp < 0)
-    {
-      printf("Invalid team number: must be different from zero\n");
-      return (-1);
+      if ((tmp = atoi(team_number)) == 0)
+	{
+	  printf("Invalid team number: must be different from zero\n");
+	  return (-1);
+	}
+      if (tmp < 0)
+	{
+	  printf("Invalid team number: must be different from zero\n");
+	  return (-1);
+	}
     }
   return (tmp);
 }
 
-int		init_player(t_princ *lemip, char *team_number)
+int		init_player(t_princ *lemip, char *team_number, char *ia_int)
 {
   char		good;
   char		*tmp;
@@ -46,5 +51,9 @@ int		init_player(t_princ *lemip, char *team_number)
 	  good = 0;
 	}
     }
+  if (ia_int && ia_int[0] == '0')
+    lemip->ia_take = 0;
+  else
+    lemip->ia_take = 1;
   return (EXIT_SUCCESS);
 }

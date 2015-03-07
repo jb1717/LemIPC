@@ -5,7 +5,7 @@
 ** Login   <tran_0@epitech.net>
 **
 ** Started on  Mon Mar  2 14:24:02 2015 David Tran
-** Last update Sat Mar  7 18:21:37 2015 David Tran
+** Last update Sat Mar  7 19:29:14 2015 David Tran
 */
 
 #include "lemipc.h"
@@ -36,6 +36,8 @@ void		exec_map(t_princ *lemip)
   first = 0;
   while (42)
     {
+      if (tmp[MAP_LEN * MAP_LEN + 1] == -1)
+	return ;
       if ((toto = search_others(lemip) == 1) && first == 1)
 	{
 	  tmp[MAP_LEN * MAP_LEN + 1] = -1;
@@ -43,8 +45,6 @@ void		exec_map(t_princ *lemip)
 	}
       else if (first == 0 && toto == 0)
 	first = 1;
-      if (tmp[MAP_LEN * MAP_LEN + 1] == -1)
-	return ;
       /*      if (msgrcv(lemip->msg_id, lemip->msgbuf, sizeof(t_msgbuf), MSG_GEN, 0) == -1)
 	{
 	  perror("Can't receive message");

@@ -5,7 +5,7 @@
 ** Login   <tran_0@epitech.net>
 **
 ** Started on  Tue Mar  3 21:47:51 2015 David Tran
-** Last update Sat Mar  7 19:23:01 2015 Jean-Baptiste Grégoire
+** Last update Sat Mar  7 19:26:41 2015 David Tran
 */
 
 #include "lemipc.h"
@@ -98,6 +98,7 @@ void		launch_all(t_graph *graph, SDL_Event *event)
       //      draw_quadra(graph);
       if (event->key.keysym.sym == SDLK_ESCAPE || event->type == SDL_QUIT || tmp[MAP_LEN * MAP_LEN + 1] == -1)
 	{
+	  tmp[MAP_LEN * MAP_LEN + 1] = -1;
 	  SDL_FreeSurface(graph->screen);
 	  SDL_Quit();
 	  return ;

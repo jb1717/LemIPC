@@ -5,7 +5,7 @@
 ** Login   <tran_0@epitech.net>
 **
 ** Started on  Sun Mar  1 15:08:16 2015 David Tran
-** Last update Sat Mar  7 19:22:18 2015 Jean-Baptiste Grégoire
+** Last update Sat Mar  7 23:10:06 2015 David Tran
 */
 
 #include "lemipc.h"
@@ -46,11 +46,13 @@ int		init_resources(t_princ *lemip)
     return (EXIT_FAILURE);
   lemip->map = (char *)(lemip->addrmap);
   if ((lemip->msg_id = msgget(lemip->key, SHM_R | SHM_W)) == -1)
-    lemip->msg_id = msgget(lemip->key, IPC_CREAT | SHM_R | SHM_W);
+    if ((lemip->msg_id = msgget(lemip->key, IPC_CREAT | SHM_R | SHM_W)) == -1)
+      return (-1);
   if ((lemip->sem_id = semget(lemip->key, 1, SHM_R | SHM_W)) == -1)
     {
-      lemip->sem_id = semget(lemip->key, 1, IPC_CREAT | SHM_R | SHM_W);
-      semctl(lemip->sem_id, 0, SETVAL, 1);
+      if ((lemip->sem_id = semget(lemip->key, 1, IPC_CREAT | SHM_R | SHM_W))
+	  == -1 || semctl(lemip->sem_id, 0, SETVAL, 1) == -1)
+	return (EXIT_FAILURE);
     }
   return (ret);
 }
@@ -61,17 +63,13 @@ int		main(int argc, char **argv)
   int		ret;
   pthread_t	take_map;
 
-  if (argc != 2)
-    {
-      printf("Usage: %s [number team]\n", argv[0]);
-      return (EXIT_SUCCESS);
-    }
   if ((ret = init_resources(&lemip)) == -1)
     {
       fprintf(stderr, "Can't create resources requiered for the battle !\n");
       return (EXIT_FAILURE);
     }
-  init_player(&lemip, argv[1]);
+  if (init_player(&lemip, argv[1], (argc > 1) ? argv[2] : NULL) == EXIT_FAILURE)
+    return (EXIT_FAILURE);
   if (ret == 2)
     {
       if (pthread_create(&take_map, NULL, ia_thread, &lemip) != 0)
@@ -81,7 +79,6 @@ int		main(int argc, char **argv)
       destroy_resources(&lemip);
     }
   else
-    ia_intermediate(&lemip);
-    /* ia_easy(&lemip); */
+    (lemip.ia_take == 1) ? ia_intermediate(&lemip) : ia_easy(&lemip);
   return (EXIT_SUCCESS);
 }

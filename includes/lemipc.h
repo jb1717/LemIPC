@@ -5,7 +5,7 @@
 ** Login   <tran_0@epitech.net>
 **
 ** Started on  Sun Mar  1 14:50:31 2015 David Tran
-** Last update Sat Mar  7 19:21:31 2015 Jean-Baptiste Grégoire
+** Last update Sat Mar  7 22:52:40 2015 David Tran
 */
 
 #ifndef LEMIPC_H_
@@ -35,7 +35,8 @@
 # define MSG_TYPE	1
 # define WIN_LEN	1000
 # define MSG_GEN	999999
-
+# define TEAM_DEF	10
+# define PLAYER_IA	1
 # define IA_COOP_RAD	2
 
 typedef struct		s_pos
@@ -68,6 +69,7 @@ typedef struct		s_princ
   t_ia			player;
   struct sembuf		sops;
   t_msgbuf		msgbuf;
+  char			ia_take;
 }			t_princ;
 
 typedef struct		s_graph
@@ -89,7 +91,7 @@ void			launch_thread(t_princ *);
 void			find_free_block(t_princ *, t_pos *);
 void			send_msg(char *, int, long);
 void			ia_scan_map(t_princ *, t_ia *, t_pos *);
-int			init_player(t_princ *, char *);
+int			init_player(t_princ *, char *, char *);
 int			destroy_resources(t_princ *);
 int			ia_intermediate(t_princ *);
 int			set_pos_value(int *, int *, int, int);
