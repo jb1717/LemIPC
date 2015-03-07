@@ -5,38 +5,51 @@
 ** Login   <tran_0@epitech.net>
 **
 ** Started on  Mon Mar  2 14:24:02 2015 David Tran
-** Last update Wed Mar  4 21:41:53 2015 David Tran
+** Last update Sat Mar  7 18:21:37 2015 David Tran
 */
 
 #include "lemipc.h"
 
-void		*launch_map_IA(void *iathread)
+int		search_others(t_princ *lemip)
 {
-  t_princ	*lemip;
-  t_msgbuf	*msgbuf;
+  int		i;
+  char		*str;
 
-  msgbuf = NULL;
-  while (42)
-     {
-       lemip = (t_princ *)(iathread);
-       if (msgrcv(lemip->msg_id, msgbuf, sizeof(t_msgbuf), MSG_GEN, 0) == -1)
-	 {
-	   perror("Can't receive message");
-	   return ((void *)(EXIT_FAILURE));
-	 }
-     }
-  return ((void *)(EXIT_SUCCESS));
+  i = 0;
+  str = (char *) lemip->addrmap;
+  while (i < MAP_LEN * MAP_LEN)
+    {
+      if (str[i] != 0 && str[i] != lemip->player.team)
+	return (0);
+      i++;
+    }
+  return (1);
 }
 
-void		launch_thread(t_princ *lemip)
+void		exec_map(t_princ *lemip)
 {
-  pthread_t	take_map;
-  int		back;
+  char		*tmp;
+  char		first;
+  int		toto;
 
-  if ((back = pthread_create(&take_map, NULL, launch_map_IA, lemip)) == 0)
-    pthread_join(take_map, NULL);
-  else if (back == -1)
-    return ;
-  /* else */
-  /*    launch_player(lemip); */
+  tmp = (char *)lemip->addrmap;
+  first = 0;
+  while (42)
+    {
+      if ((toto = search_others(lemip) == 1) && first == 1)
+	{
+	  tmp[MAP_LEN * MAP_LEN + 1] = -1;
+	  return ;
+	}
+      else if (first == 0 && toto == 0)
+	first = 1;
+      if (tmp[MAP_LEN * MAP_LEN + 1] == -1)
+	return ;
+      /*      if (msgrcv(lemip->msg_id, lemip->msgbuf, sizeof(t_msgbuf), MSG_GEN, 0) == -1)
+	{
+	  perror("Can't receive message");
+	  return ((void *)(EXIT_FAILURE));
+	  }*/
+      sleep(1);
+    }
 }

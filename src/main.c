@@ -5,31 +5,10 @@
 ** Login   <tran_0@epitech.net>
 **
 ** Started on  Sun Mar  1 15:08:16 2015 David Tran
-** Last update Fri Mar  6 20:56:49 2015 David Tran
+** Last update Sat Mar  7 18:16:39 2015 David Tran
 */
 
 #include "lemipc.h"
-
-void		print_map(t_princ *lemip)
-{
-  //  char		*tmp;
-  //int		i;
-
-  //  tmp = (char *)lemip->addrmap;
-  while (42)
-    {
-      /*      i = 0;
-      while (i < MAP_LEN * MAP_LEN)
-	{
-	  printf("%d", tmp[i]);
-	  if ((i + 1) % MAP_LEN == 0)
-	    printf("\n");
-	  i++;
-	  }*/
-      sleep(5);
-      //      system("/bin/clear");
-    }
-}
 
 int		init_memory(t_princ *lemip)
 {
@@ -39,15 +18,15 @@ int		init_memory(t_princ *lemip)
   lemip->sops.sem_num = 0;
   lemip->sops.sem_flg = 0;
   if ((lemip->shm_id = shmget(lemip->key,
-			      MAP_LEN * MAP_LEN, SHM_R | SHM_W)) == -1)
+			      MAP_LEN * MAP_LEN + 1, SHM_R | SHM_W)) == -1)
     {
-      if ((lemip->shm_id = shmget(lemip->key, MAP_LEN * MAP_LEN,
+      if ((lemip->shm_id = shmget(lemip->key, MAP_LEN * MAP_LEN + 1,
 				  IPC_CREAT | SHM_R | SHM_W)) == -1)
 	return (EXIT_FAILURE);
       if ((lemip->addrmap = shmat(lemip->shm_id, NULL,
 				  SHM_R | SHM_W)) == (void *)-1)
 	return (EXIT_FAILURE);
-      bzero(lemip->addrmap, MAP_LEN * MAP_LEN);
+      bzero(lemip->addrmap, MAP_LEN * MAP_LEN + 1);
       ret = 2;
     }
   else
@@ -95,8 +74,8 @@ int		main(int argc, char **argv)
     {
       if (pthread_create(&take_map, NULL, ia_thread, &lemip) != 0)
 	return (EXIT_FAILURE);
+      exec_map(&lemip);
       pthread_join(take_map, NULL);
-      print_map(&lemip);
       destroy_resources(&lemip);
     }
   else

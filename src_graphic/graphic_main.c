@@ -5,7 +5,7 @@
 ** Login   <tran_0@epitech.net>
 **
 ** Started on  Tue Mar  3 21:47:51 2015 David Tran
-** Last update Fri Mar  6 17:46:13 2015 Jean-Baptiste Grégoire
+** Last update Sat Mar  7 18:43:16 2015 David Tran
 */
 
 #include "lemipc.h"
@@ -53,7 +53,7 @@ void		draw_shared_map(t_graph *graph)
 	      (graph->screen, &graph->pos, SDL_MapRGB
 	       (graph->screen->format, (str[y * MAP_LEN + x] * 15) % 255,
 		(str[y * MAP_LEN + x] * 52) % 255,
-		(str[y * MAP_LEN + x] * 42) % 255));
+		(str[y * MAP_LEN + x] * 82) % 255));
 	  else
 	    SDL_FillRect
 	      (graph->screen, &graph->pos, SDL_MapRGB
@@ -86,29 +86,30 @@ int		get_memory(t_graph *graph)
   return (EXIT_SUCCESS);
 }
 
-void		*event_SDL(void *graphs)
+void		launch_all(t_graph *graph, SDL_Event *event)
 {
-  t_graph	*graph;
-  SDL_Event	event;
+  char		*tmp;
 
-  graph = (t_graph *)graphs;
+  tmp = (char *)graph->princ.addrmap;
   while (42)
     {
-      SDL_WaitEvent(&event);
-      if (event.key.keysym.sym == SDLK_ESCAPE || event.type == SDL_QUIT)
+      SDL_PollEvent(event);
+      draw_shared_map(graph);
+      //      draw_quadra(graph);
+      if (event->key.keysym.sym == SDLK_ESCAPE || event->type == SDL_QUIT || tmp[MAP_LEN * MAP_LEN + 1] == -1)
 	{
-	  graph->exit = 1;
 	  SDL_FreeSurface(graph->screen);
 	  SDL_Quit();
-	  return (NULL);
+	  return ;
 	}
+      sleep(0.5);
     }
 }
 
 int		main()
 {
   t_graph	graph;
-  pthread_t	event;
+  SDL_Event	even;
 
   graph.exit = 0;
   if (get_memory(&graph) == EXIT_FAILURE)
@@ -117,15 +118,6 @@ int		main()
     return (EXIT_FAILURE);
   graph.screen = SDL_SetVideoMode(WIN_LEN, WIN_LEN, 32, SDL_HWSURFACE);
   SDL_WM_SetCaption("PSU_2014_lemipc", NULL);
-  if (pthread_create(&event, NULL, event_SDL, &graph) != 0)
-    return (EXIT_FAILURE);
-  while (42)
-    {
-      if (graph.exit == 1)
-	return (EXIT_SUCCESS);
-      draw_shared_map(&graph);
-      draw_quadra(&graph);
-      sleep(1);
-    }
+  launch_all(&graph, &even);
   return (EXIT_SUCCESS);
 }

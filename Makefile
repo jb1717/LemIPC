@@ -5,7 +5,7 @@
 ## Login   <jibb@epitech.net>
 ##
 ## Started on  Fri Feb 27 11:27:47 2015 Jean-Baptiste Grégoire
-## Last update Thu Mar  5 22:09:22 2015 David Tran
+## Last update Sat Mar  7 14:00:09 2015 David Tran
 ##
 
 DEBUG		= 	yes
@@ -60,6 +60,6 @@ clean:
 fclean:		clean
 		$(RM) $(NAME)
 
-re:		fclean all
+re:		fclean all graphic
 
 .PHNOY:		re fclean clean all
