@@ -5,7 +5,7 @@
 ** Login   <jibb@epitech.net>
 **
 ** Started on  Tue Mar  3 15:50:38 2015 Jean-Baptiste Grégoire
-** Last update Sun Mar  8 22:00:38 2015 Jean-Baptiste Grégoire
+** Last update Sun Mar  8 23:27:51 2015 Jean-Baptiste Grégoire
 */
 
 #include "lemipc.h"
@@ -57,7 +57,7 @@ void		ia_take_direction(t_radar *r, t_ia *player, t_pos *direction)
 				 SQUARE(player->ia.y - r->enemy.y)) : -1);
   d2 = (r->friend.x != -1 ? sqrt(SQUARE(player->ia.x - r->friend.x) +
 				  SQUARE(player->ia.y - r->friend.y)) : -1);
-  if (d2 != -1 && d2 <= IA_COOP_RAD)
+  if ((d2 != -1 && d2 <= IA_COOP_RAD) || (d1 != -1 && d2 == -1))
     {
       direction->x = calc_direction(player->ia.x, r->enemy.x);
       direction->y = calc_direction(player->ia.y, r->enemy.y);
@@ -66,11 +66,6 @@ void		ia_take_direction(t_radar *r, t_ia *player, t_pos *direction)
     {
       direction->x = calc_direction(player->ia.x, r->friend.x);
       direction->y = calc_direction(player->ia.y, r->friend.y);
-    }
-  if (d1 == -1 && d2 == -1)
-    {
-      direction->x = player->ia.x;
-      direction->y = player->ia.y;
     }
 }
 

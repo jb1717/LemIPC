@@ -5,7 +5,7 @@
 ** Login   <tran_0@epitech.net>
 **
 ** Started on  Sun Mar  1 14:50:31 2015 David Tran
-** Last update Sun Mar  8 21:53:55 2015 Jean-Baptiste Grégoire
+** Last update Sun Mar  8 23:34:57 2015 Jean-Baptiste Grégoire
 */
 
 #ifndef LEMIPC_H_
@@ -38,7 +38,7 @@
 # define MSG_GEN	10
 # define TEAM_DEF	10
 # define PLAYER_IA	1
-# define IA_COOP_RAD	2
+# define IA_COOP_RAD	4
 
 typedef struct		s_pos
 {
