@@ -5,7 +5,7 @@
 ** Login   <jibb@epitech.net>
 **
 ** Started on  Tue Mar  3 15:50:38 2015 Jean-Baptiste Grégoire
-** Last update Sun Mar  8 20:44:14 2015 Jean-Baptiste Grégoire
+** Last update Sun Mar  8 21:23:49 2015 Jean-Baptiste Grégoire
 */
 
 #include "lemipc.h"
@@ -97,7 +97,7 @@ void		ia_scan_map(t_princ *lemip, t_ia *player, t_pos *direction)
       start.team = player->team;
       if (ia_check_square(&start, radius, &r, lemip) == 2)
 	{
-	  sleep(1);
+	  usleep(80000);
 	  ia_take_direction(&r, player, direction);
 	  return ;
 	}
