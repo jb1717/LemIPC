@@ -5,10 +5,10 @@
 ## Login   <jibb@epitech.net>
 ##
 ## Started on  Fri Feb 27 11:27:47 2015 Jean-Baptiste Grégoire
-## Last update Sun Mar  8 22:13:39 2015 Jean-Baptiste Grégoire
+## Last update Sun Mar  8 23:17:16 2015 Jean-Baptiste Grégoire
 ##
 
-DEBUG		= 	yes
+DEBUG		= 	no
 
 NAME		=	lemipc
 
