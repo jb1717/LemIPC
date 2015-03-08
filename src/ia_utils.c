@@ -5,7 +5,7 @@
 ** Login   <jibb@epitech.net>
 **
 ** Started on  Sat Mar  7 17:00:48 2015 Jean-Baptiste Grégoire
-** Last update Sat Mar  7 18:04:58 2015 Jean-Baptiste Grégoire
+** Last update Sun Mar  8 14:02:49 2015 Jean-Baptiste Grégoire
 */
 
 #include "lemipc.h"
@@ -56,15 +56,12 @@ void		find_free_block(t_princ *lemip, t_pos *pos)
     }
 }
 
-void		send_msg(char *msg, int msgid, long canal)
+void		send_msg(char *msg, int msgid, long canal, t_princ *lemip)
 {
-  t_msgbuf	msgbuf;
-  char		*tmp;
-
-  tmp = strdup(msg);
-  msgbuf.mtype = canal;
-  strcpy(tmp, &(*msgbuf.mdata));
-  msgsnd(msgid, &msgbuf, sizeof(msgbuf), 0);
+  lemip->msgbuf.mtype = canal;
+  strcpy(lemip->msgbuf.mdata, msg);
+  lemip->msgbuf.team = lemip->player.team;
+  msgsnd(msgid, &(lemip->msgbuf), sizeof(t_msgbuf) - sizeof(long), 0);
 }
 
 int		is_dead(t_princ *lemip)

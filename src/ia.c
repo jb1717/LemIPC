@@ -5,7 +5,7 @@
 ** Login   <jibb@epitech.net>
 **
 ** Started on  Tue Mar  3 15:50:38 2015 Jean-Baptiste Grégoire
-** Last update Sat Mar  7 19:07:32 2015 Jean-Baptiste Grégoire
+** Last update Sun Mar  8 15:26:52 2015 Jean-Baptiste Grégoire
 */
 
 #include "lemipc.h"
@@ -112,17 +112,18 @@ int		ia_intermediate(t_princ *lemip)
   while (is_alive)
     {
       sop.sem_op = 1;
-      semop(lemip->key, &sop, 1);
-      if (is_dead(lemip))
+      semop(lemip->sem_id, &sop, 1);
+      if (is_dead(lemip) || lemip->map[MAP_LEN * MAP_LEN + 1] == -1)
 	{
 	  lemip->map[lemip->player.ia.y * MAP_LEN + lemip->player.ia.x] = 0;
-	  send_msg("Aaaargh ! Je meurs !", lemip->key, MSG_GEN);
+	  send_msg("Aaaargh ! Je meurs !", lemip->key,
+		   MSG_GEN, lemip);
 	  is_alive = 0;
 	}
       else
 	ia_move(lemip);
       sop.sem_op = -1;
-      semop(lemip->key, &sop, 1);
+      semop(lemip->sem_id, &sop, 1);
     }
   return (0);
 }

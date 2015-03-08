@@ -5,7 +5,7 @@
 ** Login   <tran_0@epitech.net>
 **
 ** Started on  Mon Mar  2 14:24:02 2015 David Tran
-** Last update Sat Mar  7 19:29:14 2015 David Tran
+** Last update Sun Mar  8 13:27:46 2015 Jean-Baptiste Grégoire
 */
 
 #include "lemipc.h"
@@ -24,6 +24,14 @@ int		search_others(t_princ *lemip)
       i++;
     }
   return (1);
+}
+
+void		check_for_messages(t_princ *lemip)
+{
+  if (msgrcv(lemip->msg_id, &(lemip->msgbuf),
+	     sizeof(t_msgbuf), MSG_GEN | IPC_NOWAIT, 0) != -1)
+    printf("The player of team %d say: %s\n",
+    	   lemip->msgbuf.team, lemip->msgbuf.mdata);
 }
 
 void		exec_map(t_princ *lemip)
@@ -45,11 +53,7 @@ void		exec_map(t_princ *lemip)
 	}
       else if (first == 0 && toto == 0)
 	first = 1;
-      /*      if (msgrcv(lemip->msg_id, lemip->msgbuf, sizeof(t_msgbuf), MSG_GEN, 0) == -1)
-	{
-	  perror("Can't receive message");
-	  return ((void *)(EXIT_FAILURE));
-	  }*/
+      check_for_messages(lemip);
       sleep(1);
     }
 }

@@ -5,7 +5,7 @@
 ** Login   <tran_0@epitech.net>
 **
 ** Started on  Sun Mar  1 14:50:31 2015 David Tran
-** Last update Sat Mar  7 22:52:40 2015 David Tran
+** Last update Sun Mar  8 14:59:17 2015 Jean-Baptiste Grégoire
 */
 
 #ifndef LEMIPC_H_
@@ -23,6 +23,7 @@
 # include <unistd.h>
 # include <pthread.h>
 # include <math.h>
+# include <signal.h>
 # include <SDL/SDL.h>
 # include <SDL/SDL.h>
 # include <SDL/SDL_image.h>
@@ -89,8 +90,9 @@ typedef struct		s_radar
 
 void			launch_thread(t_princ *);
 void			find_free_block(t_princ *, t_pos *);
-void			send_msg(char *, int, long);
+void			send_msg(char *, int, long, t_princ *);
 void			ia_scan_map(t_princ *, t_ia *, t_pos *);
+void			exec_map(t_princ *);
 int			init_player(t_princ *, char *, char *);
 int			destroy_resources(t_princ *);
 int			ia_intermediate(t_princ *);
@@ -98,6 +100,7 @@ int			set_pos_value(int *, int *, int, int);
 int			calc_direction(int, int);
 int			is_dead(t_princ *);
 int			ia_move(t_princ *);
+int			ia_easy(t_princ *);
 void			*ia_thread(void *);
 
 #endif /* !LEMIPC_H_ */

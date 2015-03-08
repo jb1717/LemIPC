@@ -5,7 +5,7 @@
 ** Login   <tran_0@epitech.net>
 **
 ** Started on  Sun Mar  1 15:08:16 2015 David Tran
-** Last update Sat Mar  7 23:10:06 2015 David Tran
+** Last update Sun Mar  8 15:35:33 2015 Jean-Baptiste Grégoire
 */
 
 #include "lemipc.h"
@@ -54,6 +54,8 @@ int		init_resources(t_princ *lemip)
 	  == -1 || semctl(lemip->sem_id, 0, SETVAL, 1) == -1)
 	return (EXIT_FAILURE);
     }
+  bzero(&(lemip->msgbuf), sizeof(t_msgbuf));
+  /* signal(SIGINT, SIG_IGN); */
   return (ret);
 }
 
@@ -63,7 +65,7 @@ int		main(int argc, char **argv)
   int		ret;
   pthread_t	take_map;
 
-  if ((ret = init_resources(&lemip)) == -1)
+  if ((ret = init_resources(&lemip)) == EXIT_FAILURE)
     {
       fprintf(stderr, "Can't create resources requiered for the battle !\n");
       return (EXIT_FAILURE);
