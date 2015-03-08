@@ -5,7 +5,7 @@
 ## Login   <jibb@epitech.net>
 ##
 ## Started on  Fri Feb 27 11:27:47 2015 Jean-Baptiste Grégoire
-## Last update Sat Mar  7 19:21:00 2015 Jean-Baptiste Grégoire
+## Last update Sun Mar  8 19:08:56 2015 David Tran
 ##
 
 DEBUG		= 	yes
@@ -23,7 +23,8 @@ SRC		=	src/main.c		\
 			src/ia_utils.c		\
 			src/ia_move.c
 
-SRC_GRAPH	=	src_graphic/graphic_main.c
+SRC_GRAPH	=	src_graphic/graphic_main.c	\
+			src_graphic/graphic_setpos.c	\
 
 OBJ		=	$(SRC:.c=.o)
 

@@ -5,7 +5,7 @@
 ** Login   <tran_0@epitech.net>
 **
 ** Started on  Tue Mar  3 21:47:51 2015 David Tran
-** Last update Sat Mar  7 19:26:41 2015 David Tran
+** Last update Sun Mar  8 19:15:47 2015 David Tran
 */
 
 #include "lemipc.h"
@@ -44,20 +44,8 @@ void		draw_shared_map(t_graph *graph)
       x = 0;
       while (x < MAP_LEN)
 	{
-	  graph->pos.x = WIN_LEN / MAP_LEN * x;
-	  graph->pos.y = WIN_LEN / MAP_LEN * y;
-	  graph->pos.w = WIN_LEN / MAP_LEN;
-	  graph->pos.h = WIN_LEN / MAP_LEN;
-	  if (str[y * MAP_LEN + x] != 0)
-	    SDL_FillRect
-	      (graph->screen, &graph->pos, SDL_MapRGB
-	       (graph->screen->format, (str[y * MAP_LEN + x] * 15) % 255,
-		(str[y * MAP_LEN + x] * 52) % 255,
-		(str[y * MAP_LEN + x] * 82) % 255));
-	  else
-	    SDL_FillRect
-	      (graph->screen, &graph->pos, SDL_MapRGB
-	       (graph->screen->format, 0, 0, 0));
+	  init_pos(graph, x, y);
+	  fill_point_rect(graph, x, y, str);
 	  x++;
 	}
       y++;
@@ -74,7 +62,8 @@ int		get_memory(t_graph *graph)
   if ((graph->princ.shm_id = shmget(graph->princ.key,
 				   MAP_LEN * MAP_LEN, SHM_R | SHM_W)) == -1)
     {
-      printf("No Shared memory created.\nUSAGE : Launch once \'./lemipc [team number]'\n");
+      printf("No Shared memory created.\nUSAGE ");
+      printf(": Launch once \'./lemipc [team number]'\n");
       return (EXIT_FAILURE);
     }
   if ((graph->princ.shm_id = shmget(graph->princ.key,
@@ -95,8 +84,8 @@ void		launch_all(t_graph *graph, SDL_Event *event)
     {
       SDL_PollEvent(event);
       draw_shared_map(graph);
-      //      draw_quadra(graph);
-      if (event->key.keysym.sym == SDLK_ESCAPE || event->type == SDL_QUIT || tmp[MAP_LEN * MAP_LEN + 1] == -1)
+      if (event->key.keysym.sym == SDLK_ESCAPE || event->type == SDL_QUIT ||
+	  tmp[MAP_LEN * MAP_LEN + 1] == -1)
 	{
 	  tmp[MAP_LEN * MAP_LEN + 1] = -1;
 	  SDL_FreeSurface(graph->screen);

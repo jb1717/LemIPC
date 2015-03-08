@@ -5,7 +5,7 @@
 ** Login   <tran_0@epitech.net>
 **
 ** Started on  Sun Mar  1 15:08:16 2015 David Tran
-** Last update Sun Mar  8 15:35:33 2015 Jean-Baptiste Grégoire
+** Last update Sun Mar  8 19:20:41 2015 David Tran
 */
 
 #include "lemipc.h"
@@ -55,9 +55,9 @@ int		init_resources(t_princ *lemip)
 	return (EXIT_FAILURE);
     }
   bzero(&(lemip->msgbuf), sizeof(t_msgbuf));
-  /* signal(SIGINT, SIG_IGN); */
   return (ret);
 }
+/* signal(SIGINT, SIG_IGN); */
 
 int		main(int argc, char **argv)
 {

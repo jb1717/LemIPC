@@ -5,7 +5,7 @@
 ** Login   <tran_0@epitech.net>
 **
 ** Started on  Sun Mar  1 14:50:31 2015 David Tran
-** Last update Sun Mar  8 14:59:17 2015 Jean-Baptiste Grégoire
+** Last update Sun Mar  8 20:01:04 2015 David Tran
 */
 
 #ifndef LEMIPC_H_
@@ -35,7 +35,7 @@
 # define MSG_BUF_SIZE	256
 # define MSG_TYPE	1
 # define WIN_LEN	1000
-# define MSG_GEN	999999
+# define MSG_GEN	10
 # define TEAM_DEF	10
 # define PLAYER_IA	1
 # define IA_COOP_RAD	2
@@ -102,5 +102,7 @@ int			is_dead(t_princ *);
 int			ia_move(t_princ *);
 int			ia_easy(t_princ *);
 void			*ia_thread(void *);
+void			init_pos(t_graph *, int, int);
+void			fill_point_rect(t_graph *, int, int , char *);
 
 #endif /* !LEMIPC_H_ */

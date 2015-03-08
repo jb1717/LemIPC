@@ -5,7 +5,7 @@
 ** Login   <jibb@epitech.net>
 **
 ** Started on  Tue Mar  3 15:50:38 2015 Jean-Baptiste Grégoire
-** Last update Sun Mar  8 17:18:40 2015 Jean-Baptiste Grégoire
+** Last update Sun Mar  8 19:28:22 2015 David Tran
 */
 
 #include "lemipc.h"
@@ -87,6 +87,11 @@ void		ia_scan_map(t_princ *lemip, t_ia *player, t_pos *direction)
   r.friend.y = -1;
   while (radius < MAP_LEN)
     {
+      if (lemip->map[MAP_LEN * MAP_LEN + 1] == -1)
+	{
+	  printf("gogogogogogogo\n");
+	  return ;
+	}
       start.ia.x = player->ia.x - radius;
       start.ia.y = player->ia.y - radius;
       start.team = player->team;
@@ -119,6 +124,7 @@ int		ia_intermediate(t_princ *lemip)
 	  send_msg("Aaaargh ! Je meurs !", lemip->key,
 		   MSG_GEN, lemip);
 	  is_alive = 0;
+	  printf("gout\n");
 	}
       else
 	ia_move(lemip);

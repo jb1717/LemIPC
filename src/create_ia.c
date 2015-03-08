@@ -5,7 +5,7 @@
 ** Login   <jibb@epitech.net>
 **
 ** Started on  Tue Mar  3 10:53:23 2015 Jean-Baptiste Grégoire
-** Last update Sun Mar  8 14:13:39 2015 Jean-Baptiste Grégoire
+** Last update Sun Mar  8 19:23:56 2015 David Tran
 */
 
 #include "lemipc.h"
@@ -25,7 +25,7 @@ static int	get_team_number(char *team_number)
 	}
       if (tmp < 0)
 	{
-	  printf("Invalid team number: must be inferior from zero\n");
+	  printf("Invalid team number: must be > 0\n");
 	  return (-1);
 	}
     }

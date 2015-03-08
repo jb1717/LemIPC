@@ -5,7 +5,7 @@
 ** Login   <tran_0@epitech.net>
 **
 ** Started on  Mon Mar  2 14:24:02 2015 David Tran
-** Last update Sun Mar  8 13:27:46 2015 Jean-Baptiste Grégoire
+** Last update Sun Mar  8 19:53:27 2015 David Tran
 */
 
 #include "lemipc.h"
@@ -17,7 +17,7 @@ int		search_others(t_princ *lemip)
 
   i = 0;
   str = (char *) lemip->addrmap;
-  while (i < MAP_LEN * MAP_LEN)
+  while (i < MAP_LEN * MAP_LEN - 1)
     {
       if (str[i] != 0 && str[i] != lemip->player.team)
 	return (0);
@@ -28,8 +28,8 @@ int		search_others(t_princ *lemip)
 
 void		check_for_messages(t_princ *lemip)
 {
-  if (msgrcv(lemip->msg_id, &(lemip->msgbuf),
-	     sizeof(t_msgbuf), MSG_GEN | IPC_NOWAIT, 0) != -1)
+  while (msgrcv(lemip->msg_id, &(lemip->msgbuf),
+		sizeof(t_msgbuf), MSG_GEN, IPC_NOWAIT) != -1)
     printf("The player of team %d say: %s\n",
     	   lemip->msgbuf.team, lemip->msgbuf.mdata);
 }
@@ -48,6 +48,7 @@ void		exec_map(t_princ *lemip)
 	return ;
       if ((toto = search_others(lemip) == 1) && first == 1)
 	{
+	  printf("set to value -1\n");
 	  tmp[MAP_LEN * MAP_LEN + 1] = -1;
 	  return ;
 	}
