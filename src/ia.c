@@ -5,7 +5,7 @@
 ** Login   <jibb@epitech.net>
 **
 ** Started on  Tue Mar  3 15:50:38 2015 Jean-Baptiste Grégoire
-** Last update Sun Mar  8 21:20:12 2015 David Tran
+** Last update Sun Mar  8 21:23:16 2015 David Tran
 */
 
 #include "lemipc.h"
@@ -118,7 +118,7 @@ int		ia_intermediate(t_princ *lemip)
       if (is_dead(lemip) || lemip->map[MAP_LEN * MAP_LEN + 1] == -1)
 	{
 	  lemip->map[lemip->player.ia.y * MAP_LEN + lemip->player.ia.x] = 0;
-	  send_msg("Aaaargh ! Je meurs !", lemip->key,
+	  send_msg("Aaaargh ! Je meurs !", lemip->msg_id,
 		   MSG_GEN, lemip);
 	  is_alive = 0;
 	  printf("gout\n");
