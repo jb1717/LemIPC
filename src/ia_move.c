@@ -5,7 +5,7 @@
 ** Login   <jibb@epitech.net>
 **
 ** Started on  Sat Mar  7 19:07:25 2015 Jean-Baptiste Grégoire
-** Last update Sun Mar  8 21:20:31 2015 Jean-Baptiste Grégoire
+** Last update Sun Mar  8 23:12:53 2015 Jean-Baptiste Grégoire
 */
 
 #include "lemipc.h"
@@ -17,7 +17,8 @@ int		ia_move(t_princ *lemip)
   direction.x = -1;
   direction.y = -1;
   ia_scan_map(lemip, &(lemip->player), &direction);
-  if (direction.x == -1 || lemip->map[direction.y * MAP_LEN + direction.x] != 0)
+  if (direction.x == -1 || lemip->map[direction.y *
+				      MAP_LEN + direction.x] != 0)
     find_free_block(lemip, &direction);
   if (direction.x != -1)
     {

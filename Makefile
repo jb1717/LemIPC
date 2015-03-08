@@ -5,7 +5,7 @@
 ## Login   <jibb@epitech.net>
 ##
 ## Started on  Fri Feb 27 11:27:47 2015 Jean-Baptiste Grégoire
-## Last update Sun Mar  8 19:08:56 2015 David Tran
+## Last update Sun Mar  8 22:13:39 2015 Jean-Baptiste Grégoire
 ##
 
 DEBUG		= 	yes
@@ -21,7 +21,8 @@ SRC		=	src/main.c		\
 			src/ia.c		\
 			src/ia_easy.c		\
 			src/ia_utils.c		\
-			src/ia_move.c
+			src/ia_move.c		\
+			src/signal.c
 
 SRC_GRAPH	=	src_graphic/graphic_main.c	\
 			src_graphic/graphic_setpos.c	\

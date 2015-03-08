@@ -5,7 +5,7 @@
 ** Login   <tran_0@epitech.net>
 **
 ** Started on  Sun Mar  1 14:50:31 2015 David Tran
-** Last update Sun Mar  8 21:21:30 2015 David Tran
+** Last update Sun Mar  8 21:53:55 2015 Jean-Baptiste Grégoire
 */
 
 #ifndef LEMIPC_H_
@@ -72,6 +72,7 @@ typedef struct		s_princ
   t_msgbuf		msgbuf;
   char			ia_take;
   char			exit;
+  char			first;
 }			t_princ;
 
 typedef struct		s_graph
@@ -105,6 +106,8 @@ int			ia_easy(t_princ *);
 int			ia_thread(t_princ *);
 void			init_pos(t_graph *, int, int);
 void			fill_point_rect(t_graph *, int, int , char *);
+void			get_sigint(int);
 int			launch_ia_easy(t_princ *, char *);
+t_princ			*init_resources(int);
 
 #endif /* !LEMIPC_H_ */
