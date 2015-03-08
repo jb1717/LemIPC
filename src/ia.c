@@ -5,7 +5,7 @@
 ** Login   <jibb@epitech.net>
 **
 ** Started on  Tue Mar  3 15:50:38 2015 Jean-Baptiste Grégoire
-** Last update Sun Mar  8 15:26:52 2015 Jean-Baptiste Grégoire
+** Last update Sun Mar  8 17:18:40 2015 Jean-Baptiste Grégoire
 */
 
 #include "lemipc.h"
@@ -106,7 +106,7 @@ int		ia_intermediate(t_princ *lemip)
   char		is_alive;
   struct sembuf	sop;
 
-  sop.sem_num = 1;
+  sop.sem_num = 0;
   sop.sem_flg = 0;
   is_alive = 1;
   while (is_alive)
