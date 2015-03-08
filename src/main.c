@@ -5,7 +5,7 @@
 ** Login   <tran_0@epitech.net>
 **
 ** Started on  Sun Mar  1 15:08:16 2015 David Tran
-** Last update Sun Mar  8 19:20:41 2015 David Tran
+** Last update Sun Mar  8 21:06:48 2015 David Tran
 */
 
 #include "lemipc.h"
@@ -26,7 +26,7 @@ int		init_memory(t_princ *lemip)
       if ((lemip->addrmap = shmat(lemip->shm_id, NULL,
 				  SHM_R | SHM_W)) == (void *)-1)
 	return (EXIT_FAILURE);
-      bzero(lemip->addrmap, MAP_LEN * MAP_LEN + 1);
+      bzero(lemip->addrmap, MAP_LEN * MAP_LEN + 2);
       ret = 2;
     }
   else
@@ -63,7 +63,6 @@ int		main(int argc, char **argv)
 {
   t_princ	lemip;
   int		ret;
-  pthread_t	take_map;
 
   if ((ret = init_resources(&lemip)) == EXIT_FAILURE)
     {
@@ -74,10 +73,7 @@ int		main(int argc, char **argv)
     return (EXIT_FAILURE);
   if (ret == 2)
     {
-      if (pthread_create(&take_map, NULL, ia_thread, &lemip) != 0)
-	return (EXIT_FAILURE);
       exec_map(&lemip);
-      pthread_join(take_map, NULL);
       destroy_resources(&lemip);
     }
   else
